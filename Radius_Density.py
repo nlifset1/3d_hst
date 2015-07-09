@@ -127,6 +127,9 @@ def rand_counts(R):
     within_lst = tree.query_ball_point([x1,y1,z1], R)
     within = len(within_lst)
     return within
+    
+    return small_counts
+    
 
 #getting list of galaxies that avoid edges by 0.05 degrees#
 lst_gal_edged =[]
@@ -149,32 +152,26 @@ lst_gal_small = lst_gal_edged
 for gal in lst_gal_massed:
     lst_gal_small.remove(gal)
 
-#making lists for the plots of mass vs density, R is in MPC#
-R = 20
-rand_counted = 0
-for i in range(len(lst_gal_massed)):
-    rand_counted += rand_counts(R)
-rand_counted = float(rand_counted/len(lst_gal_massed))
-lst_mass =[]
-lst_counts =[]
-for gal in lst_gal_massed:
-    gal_counted = Counts(gal, R)
-    lst_counts.append((float(gal_counted) - rand_counted)/((R**2)*math.pi))
-    for item in data_fast_flagged:
-        if item['id'] == gal:
-            lst_mass.append(item['lmass'])
+#making lists for the plots of radius vs density, r is in MPC#
+lst_r = [5,10,15,20,25,30]
+lst_density = []
+for r in lst_r:
+    within_total = 0
+    for gal in lst_gal_massed:
+        within = float(Counts(gal, r) - rand_counts(r))
+        within_total += within
+    within_total = float(within_total)/float(len(lst_gal_massed))
+    lst_density.append(within_total/((r**2)*math.pi))
 
 
-#plotting mass vs density#
+#plotting radius vs density#
 
-pylab.scatter(lst_mass, lst_counts)
+pylab.scatter(lst_r, lst_density)
 
-pylab.suptitle('Log Mass vs Log Galaxy Number Density of All Redshifts', fontsize=20)
-pylab.xlabel('Log Mass', fontsize=16)
+pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=20)
+pylab.xlabel('Radius', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density (mpc^-2)', fontsize=15)
-pylab.xlim([10.96,11.6])
-pylab.ylim([0.004,0.06])
-pylab.yscale('log')
+pylab.xlim([0,30])
 
 
 pylab.ion()

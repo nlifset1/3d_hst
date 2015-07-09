@@ -13,17 +13,23 @@ from scipy import spatial
 data = ascii.read("aegis_3dhst.v4.1.cat")
 data_fast = ascii.read("aegis_3dhst.v4.1.fout")
 data_z = ascii.read("aegis_3dhst.v4.0.sfr")
+data_s = ascii.read("aegis_3dhst.v4.1_f160w.galfit")
+
 
 #flag out the bad stuff#
 idx, = np.where((data["use_phot"] == 1.0) & (data["star_flag"] == 0.0))
 data_fast_flag = data_fast[idx]
 data_flag = data[idx]
 data_z_flag = data_z[idx]
+data_s_flag = data_s[idx]
+
 
 idx2, = np.where(data_fast_flag["lsfr"] != -99)
 data_fast_flagged = data_fast_flag[idx2]
 data_flagged = data_flag[idx2]
 data_z_flagged = data_z_flag[idx2]
+data_s_flagged = data_s_flag[idx2]
+
 
 #creating a function for finding number of galaxies within a radius R#
 def Counts(gal_id, R):
@@ -155,24 +161,24 @@ rand_counted = 0
 for i in range(len(lst_gal_massed)):
     rand_counted += rand_counts(R)
 rand_counted = float(rand_counted/len(lst_gal_massed))
-lst_mass =[]
+lst_sersic =[]
 lst_counts =[]
 for gal in lst_gal_massed:
     gal_counted = Counts(gal, R)
     lst_counts.append((float(gal_counted) - rand_counted)/((R**2)*math.pi))
-    for item in data_fast_flagged:
-        if item['id'] == gal:
-            lst_mass.append(item['lmass'])
+    for item in data_s_flagged:
+        if item['NUMBER'] == gal:
+            lst_sersic.append(item['n'])
 
 
-#plotting mass vs density#
+#plotting sersic vs density#
 
-pylab.scatter(lst_mass, lst_counts)
+pylab.scatter(lst_sersic, lst_counts)
 
-pylab.suptitle('Log Mass vs Log Galaxy Number Density of All Redshifts', fontsize=20)
-pylab.xlabel('Log Mass', fontsize=16)
+pylab.suptitle('Sersic Index vs Log Galaxy Number Density of All Redshifts', fontsize=20)
+pylab.xlabel('Sersic Index', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density (mpc^-2)', fontsize=15)
-pylab.xlim([10.96,11.6])
+pylab.xlim([0,8.5])
 pylab.ylim([0.004,0.06])
 pylab.yscale('log')
 

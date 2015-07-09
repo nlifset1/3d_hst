@@ -155,24 +155,24 @@ rand_counted = 0
 for i in range(len(lst_gal_massed)):
     rand_counted += rand_counts(R)
 rand_counted = float(rand_counted/len(lst_gal_massed))
-lst_mass =[]
+lst_sfr =[]
 lst_counts =[]
 for gal in lst_gal_massed:
     gal_counted = Counts(gal, R)
     lst_counts.append((float(gal_counted) - rand_counted)/((R**2)*math.pi))
     for item in data_fast_flagged:
         if item['id'] == gal:
-            lst_mass.append(item['lmass'])
+            lst_sfr.append(item['lsfr'])
 
 
-#plotting mass vs density#
+#plotting sfr vs density#
 
-pylab.scatter(lst_mass, lst_counts)
+pylab.scatter(lst_sfr, lst_counts)
 
-pylab.suptitle('Log Mass vs Log Galaxy Number Density of All Redshifts', fontsize=20)
-pylab.xlabel('Log Mass', fontsize=16)
+pylab.suptitle('Log SFR vs Log Galaxy Number Density of All Redshifts', fontsize=20)
+pylab.xlabel('Log SFR', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density (mpc^-2)', fontsize=15)
-pylab.xlim([10.96,11.6])
+pylab.xlim([-3,2.5])
 pylab.ylim([0.004,0.06])
 pylab.yscale('log')
 
