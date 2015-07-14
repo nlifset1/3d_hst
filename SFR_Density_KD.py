@@ -171,7 +171,7 @@ pylab.scatter(lst_sfr, lst_counts)
 
 pylab.suptitle('Log SFR vs Log Galaxy Number Density of All Redshifts', fontsize=20)
 pylab.xlabel('Log SFR', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density (mpc^-2)', fontsize=15)
+pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
 pylab.xlim([-3,2.5])
 pylab.ylim([0.004,0.06])
 pylab.yscale('log')

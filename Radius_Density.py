@@ -10,6 +10,8 @@ import random
 from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 os.chdir('C:\\3d_hst')
 
 #bring in the data#
@@ -18,15 +20,11 @@ data_fast = ascii.read("aegis_3dhst.v4.1.fout")
 data_z = ascii.read("aegis_3dhst.v4.0.sfr")
 
 #flag out the bad stuff#
-idx, = np.where((data["use_phot"] == 1.0) & (data["star_flag"] == 0.0))
-data_fast_flag = data_fast[idx]
-data_flag = data[idx]
-data_z_flag = data_z[idx]
+idx, = np.where((data["use_phot"] == 1.0) & (data_fast["lsfr"] != -99))
+data_fast_flagged = data_fast[idx]
+data_flagged = data[idx]
+data_z_flagged = data_z[idx]
 
-idx2, = np.where(data_fast_flag["lsfr"] != -99)
-data_fast_flagged = data_fast_flag[idx2]
-data_flagged = data_flag[idx2]
-data_z_flagged = data_z_flag[idx2]
 
 #creating a function for finding number of galaxies within a radius R (kpc)#
 def Counts(gal_id, z, R):
@@ -34,7 +32,7 @@ def Counts(gal_id, z, R):
     lst_gal1 = []
     lst_gal = []
     for gal in data_z_flagged:
-        if ((gal['z'] >= (z - 0.03)) and (gal['z'] <= (z + 0.03))):
+        if ((gal['z'] >= (z - 0.08)) and (gal['z'] <= (z + 0.08))):
             if gal['id'] != gal_id:
                 lst_gal1.append(gal['id'])
     #restricting that list to galaxies above lmass of 9.415 for a 90% completeness#
@@ -47,24 +45,24 @@ def Counts(gal_id, z, R):
     kpc_per = cosmo.kpc_proper_per_arcmin(z)
     arcmin_per = kpc_per**(-1)
     arcmin = arcmin_per*(R)
-    degrees_ = arcmin*0.25
+    degrees_ = arcmin/60
     degrees = degrees_.value
-    radius_rad = degrees*0.0174532925
+    radius_rad = degrees*(math.pi/180)
 
     #retrieving RA and DEC data (to radians) of given galaxy#
     p1 = data_flagged[(data_flagged['id'] == gal_id)]
-    ra1_ = (p1['ra'])*0.0174532925
+    ra1_ = (p1['ra'])*(math.pi/180)
     ra1 = ra1_[0]
-    dec1_ = (p1['dec'])*0.0174532925
+    dec1_ = (p1['dec'])*(math.pi/180)
     dec1 = dec1_[0]
     #making a list of galaxies in range of radius 'radius_rad'#
     lst_radians = []
     for gal in lst_gal:
         #pulling the necessary info of each galaxy in previous list#
         position_info = data_flagged[(data_flagged['id'] == gal)]
-        ra_ = (position_info['ra'])*0.0174532925
+        ra_ = (position_info['ra'])*(math.pi/180)
         ra = ra_[0]
-        dec_ = (position_info['dec'])*0.0174532925
+        dec_ = (position_info['dec'])*(math.pi/180)
         dec = dec_[0]
         #converting data to find the distance in radians to given galaxy#
         del_dec = dec - dec1
@@ -88,7 +86,7 @@ def rand_counts(z, R):
     lst_gal1 = []
     lst_gal = []
     for gal in data_z_flagged:
-        if ((gal['z'] >= (z - 0.03)) and (gal['z'] <= (z + 0.03))):
+        if ((gal['z'] >= (z - 0.08)) and (gal['z'] <= (z + 0.08))):
             lst_gal1.append(gal['id'])
     #restricting that list to galaxies above lmass of 9.415 for a 90% completeness#
     for gal in lst_gal1:
@@ -100,18 +98,18 @@ def rand_counts(z, R):
     kpc_per = cosmo.kpc_proper_per_arcmin(z)
     arcmin_per = kpc_per**(-1)
     arcmin = arcmin_per*(R)
-    degrees_ = arcmin*0.25
+    degrees_ = arcmin/60
     degrees = degrees_.value
-    radius_rad = degrees*0.0174532925
+    radius_rad = degrees*(math.pi/180)
 
     #making a list of galaxies in range of radius 'radius_rad'#
     lst_radians = []
     for gal in lst_gal:
         #pulling the necessary info of each galaxy in previous list#
         position_info = data_flagged[(data_flagged['id'] == gal)]
-        ra_ = (position_info['ra'])*0.0174532925
+        ra_ = (position_info['ra'])*(math.pi/180)
         ra = ra_[0]
-        dec_ = (position_info['dec'])*0.0174532925
+        dec_ = (position_info['dec'])*(math.pi/180)
         dec = dec_[0]
         #converting data to find the distance in radians to given galaxy#
         del_dec = dec - dec1
@@ -144,7 +142,7 @@ for gal in lst_gal_edged:
             lst_gal_massed.append(gal)
 
 #making lists for the plots of radius vs density, r is in KPC#
-lst_r = [50, 100, 150, 200]
+lst_r = [20,50,100,200,500]
 lst_density = []
 for r in lst_r:
     density_total = 0
@@ -167,8 +165,8 @@ pylab.scatter(lst_r, lst_density)
 pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
 pylab.xlabel('Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.xlim([0,210])
-pylab.ylim([0.0001,0.001])
+pylab.xlim([0,510])
+pylab.ylim([0.000001,0.0005])
 pylab.yscale('log')
 
 

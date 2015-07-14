@@ -15,124 +15,112 @@ data_fast = ascii.read("aegis_3dhst.v4.1.fout")
 data_z = ascii.read("aegis_3dhst.v4.0.sfr")
 data_s = ascii.read("aegis_3dhst.v4.1_f160w.galfit")
 
-
 #flag out the bad stuff#
-idx, = np.where((data["use_phot"] == 1.0) & (data["star_flag"] == 0.0))
-data_fast_flag = data_fast[idx]
-data_flag = data[idx]
-data_z_flag = data_z[idx]
-data_s_flag = data_s[idx]
+idx, = np.where((data["use_phot"] == 1.0) & (data_fast["lsfr"] != -99))
+data_fast_flagged = data_fast[idx]
+data_flagged = data[idx]
+data_z_flagged = data_z[idx]
+data_s_flagged = data_S[idx]
 
 
-idx2, = np.where(data_fast_flag["lsfr"] != -99)
-data_fast_flagged = data_fast_flag[idx2]
-data_flagged = data_flag[idx2]
-data_z_flagged = data_z_flag[idx2]
-data_s_flagged = data_s_flag[idx2]
-
-
-#creating a function for finding number of galaxies within a radius R#
-def Counts(gal_id, R):
-    #creating a redshift range about the chosen galaxy#
-    z_un = data_z_flagged[(data_z_flagged['id'] == gal_id)]
-    z_und = z_un['z']
-    z = z_und[0]
-    #making a list of galaxies in that range#
+#creating a function for finding number of galaxies within a radius R (kpc)#
+def Counts(gal_id, z, R):
+    #making a list of galaxies in within a redshift of 0.03 of given z#
+    lst_gal1 = []
     lst_gal = []
-    for gal in data_fast_flagged:
-        if ((gal['z'] >= (z - 0.03)) and (gal['z'] <= (z + 0.03))):
+    for gal in data_z_flagged:
+        if ((gal['z'] >= (z - 0.08)) and (gal['z'] <= (z + 0.08))):
             if gal['id'] != gal_id:
-                lst_gal.append(gal['id'])
-    #making lists of the euclidean coordinates of every galaxy in the range#
-    lst_x = []
-    lst_y = []
-    lst_z = []
-    for gal in lst_gal:
-        #pulling the necessary info#
-        position_info = data_flagged[(data_flagged['id'] == gal)]
-        z_info = data_z_flagged[(data_z_flagged['id'] == gal)]
+                lst_gal1.append(gal['id'])
+    #restricting that list to galaxies above lmass of 9.415 for a 90% completeness#
+    for gal in lst_gal1:
+        gal_info = data_fast_flagged[(data_fast_flagged['id'] == gal)]
+        if gal_info['lmass'] >= 9.415:
+            lst_gal.append(gal)
 
-        ra_ = (position_info['ra'])*0.0174532925
-        ra = ra_[0]
-        dec_ = (position_info['dec'])*0.0174532925
-        dec = dec_[0]
-        dist_ = (z_info['z'])*4285
-        dist = dist_[0]
-        #calculating the euclidean coordinates#
-        x = (math.cos(ra))*(math.cos(dec))*(dist)
-        y = (math.sin(ra))*(math.cos(dec))*(dist)
-        z = (math.sin(ra))*(dist)
+    #converting radius R (kpc) to radians at given redshift z#
+    kpc_per = cosmo.kpc_proper_per_arcmin(z)
+    arcmin_per = kpc_per**(-1)
+    arcmin = arcmin_per*(R)
+    degrees_ = arcmin/60
+    degrees = degrees_.value
+    radius_rad = degrees*(math.pi/180)
 
-        #putting those coordinates into the lists#
-        lst_x.append(x)
-        lst_y.append(y)
-        lst_z.append(z)
-    #making a KD Tree of the euclidean info#
-    points = zip(lst_x, lst_y, lst_z)
-    tree = spatial.KDTree(points)
-    #getting euclidean coordinates of the specific galaxy#
+    #retrieving RA and DEC data (to radians) of given galaxy#
     p1 = data_flagged[(data_flagged['id'] == gal_id)]
-    ra1_ = (p1['ra'])*0.0174532925
+    ra1_ = (p1['ra'])*(math.pi/180)
     ra1 = ra1_[0]
-    dec1_ = (p1['dec'])*0.0174532925
+    dec1_ = (p1['dec'])*(math.pi/180)
     dec1 = dec1_[0]
-    dist1_ = (z_un['z'])*4282.7494
-    dist1 = dist1_[0]
-    x1 = (math.cos(ra1))*(math.cos(dec1))*(dist1)
-    y1 = (math.sin(ra1))*(math.cos(dec1))*(dist1)
-    z1 = (math.sin(ra1))*(dist1)
-    #finding number of galaxies within radius R of the specific galaxy#
-    within_lst = tree.query_ball_point([x1,y1,z1], R)
-    within = len(within_lst)
+    #making a list of galaxies in range of radius 'radius_rad'#
+    lst_radians = []
+    for gal in lst_gal:
+        #pulling the necessary info of each galaxy in previous list#
+        position_info = data_flagged[(data_flagged['id'] == gal)]
+        ra_ = (position_info['ra'])*(math.pi/180)
+        ra = ra_[0]
+        dec_ = (position_info['dec'])*(math.pi/180)
+        dec = dec_[0]
+        #converting data to find the distance in radians to given galaxy#
+        del_dec = dec - dec1
+        del_ra = ra - ra1
+        mean_dec = (dec + dec1)/2.0
+        del_radians = math.sqrt(del_dec**2 + (del_ra*math.cos(mean_dec))**2)
+        lst_radians.append(del_radians)
+    #finding number of distances in lst_radians that are within calculated radius_rad#
+    within = 0
+    for dist in lst_radians:
+        if dist <= radius_rad:
+            within += 1
     return within
 
 #creating a function similar to Counts but for random base line#
-def rand_counts(R):
+def rand_counts(z, R):
     #picking random location for galaxy number density#
     ra1 = random.uniform(3.746000, 3.756821)
     dec1 = random.uniform(0.920312, 0.925897)
-    z = random.uniform(0.4, 2.0)
-    #making a list of galaxies within a specific redshift range of random point#
+    #making a list of galaxies in within a redshift of 0.03 of given z#
+    lst_gal1 = []
     lst_gal = []
-    for gal in data_fast_flagged:
-        if ((gal['z'] >= (z - 0.03)) and (gal['z'] <= (z + 0.03))):
-                lst_gal.append(gal['id'])
-    #making lists of the euclidean coordinates of galaxies in that range#
-    x_lst = []
-    y_lst = []
-    z_lst = []
+    for gal in data_z_flagged:
+        if ((gal['z'] >= (z - 0.08)) and (gal['z'] <= (z + 0.08))):
+            lst_gal1.append(gal['id'])
+    #restricting that list to galaxies above lmass of 9.415 for a 90% completeness#
+    for gal in lst_gal1:
+        gal_info = data_fast_flagged[(data_fast_flagged['id'] == gal)]
+        if gal_info['lmass'] >= 9.415:
+            lst_gal.append(gal)
+
+    #converting radius R (kpc) to radians at given redshift z#
+    kpc_per = cosmo.kpc_proper_per_arcmin(z)
+    arcmin_per = kpc_per**(-1)
+    arcmin = arcmin_per*(R)
+    degrees_ = arcmin/60
+    degrees = degrees_.value
+    radius_rad = degrees*(math.pi/180)
+
+    #making a list of galaxies in range of radius 'radius_rad'#
+    lst_radians = []
     for gal in lst_gal:
-        #pulling the necessary info#
+        #pulling the necessary info of each galaxy in previous list#
         position_info = data_flagged[(data_flagged['id'] == gal)]
-        z_info = data_z_flagged[(data_z_flagged['id'] == gal)]
-
-        ra_ = (position_info['ra'])*0.0174532925
+        ra_ = (position_info['ra'])*(math.pi/180)
         ra = ra_[0]
-        dec_ = (position_info['dec'])*0.0174532925
+        dec_ = (position_info['dec'])*(math.pi/180)
         dec = dec_[0]
-        dist_ = (z_info['z'])*4285
-        dist = dist_[0]
-        #calculating the euclidean coordinates#
-        x = (math.cos(ra))*(math.cos(dec))*(dist)
-        y = (math.sin(ra))*(math.cos(dec))*(dist)
-        z = (math.sin(ra))*(dist)
-
-        #putting those coordinates into the lists#
-        x_lst.append(x)
-        y_lst.append(y)
-        z_lst.append(z)
-    #making a KD Tree of the info#
-    points = zip(x_lst, y_lst, z_lst)
-    tree = spatial.KDTree(points)
-    #getting euclidean coordinates of specific galaxy#
-    dist1 = (z)*4282.7494
-    x1 = (math.cos(ra1))*(math.cos(dec1))*(dist1)
-    y1 = (math.sin(ra1))*(math.cos(dec1))*(dist1)
-    z1 = (math.sin(ra1))*(dist1)
-    #calculating number of galaxies within radius R#
-    within_lst = tree.query_ball_point([x1,y1,z1], R)
-    within = len(within_lst)
+        #converting data to find the distance in radians to given galaxy#
+        del_dec = dec - dec1
+        del_ra = ra - ra1
+        mean_dec = (dec + dec1)/2.0
+        del_radians = math.sqrt(del_dec**2 + (del_ra*math.cos(mean_dec))**2)
+        lst_radians.append(del_radians)
+    #finding number of distances in lst_radians that are within calculated radius_rad#
+    within = 0
+    for dist in lst_radians:
+        if dist <= radius_rad:
+            within += 1
     return within
+    
 
 #getting list of galaxies that avoid edges by 0.05 degrees#
 lst_gal_edged =[]
@@ -146,40 +134,109 @@ for gal in data_flagged:
 lst_gal_massed = []
 for gal in lst_gal_edged:
     gal_info = data_fast_flagged[(data_z_flagged['id'] == gal)]
-    if ((gal_info['z'] >= 0.4) & (gal_info['z'] <= 2.0)):
+    if ((gal_info['z'] >= 0.5) & (gal_info['z'] <= 2.5)):
         if (gal_info['lmass'] >= 11.0):
             lst_gal_massed.append(gal)
 
-#getting a list of all galaxies that avoid edges and aren't massive#
-lst_gal_small = lst_gal_edged
+#splitting the massed list into four redshift bins#
+#bin 1: 2.0 < z < 2.5#
+#bin 2: 1.5 < z < 2.0#
+#bin 3: 1.0 < z < 1.5#
+#bin 4: 0.5 < z < 2.0#
+lst_gal_massed1 = []
+lst_gal_massed2 = []
+lst_gal_massed3 = []
+lst_gal_massed4 = []
 for gal in lst_gal_massed:
-    lst_gal_small.remove(gal)
+    gal_info = data_z_flagged[(data_z_flagged['id'] == gal)]
+    if gal_info['z'] >= 2.0:
+        lst_gal_massed1.append(gal)
+    elif gal_info['z'] >= 1.5:
+        lst_gal_massed2.append(gal)
+    elif gal_info['z'] >= 1.0:
+        lst_gal_massed3.append(gal)
+    elif gal_info['z'] >= 0.5:
+        lst_gal_massed4.append(gal)
+
 
 #making lists for the plots of mass vs density, R is in MPC#
 R = 20
-rand_counted = 0
-for i in range(len(lst_gal_massed)):
-    rand_counted += rand_counts(R)
-rand_counted = float(rand_counted/len(lst_gal_massed))
-lst_sersic =[]
-lst_counts =[]
-for gal in lst_gal_massed:
-    gal_counted = Counts(gal, R)
-    lst_counts.append((float(gal_counted) - rand_counted)/((R**2)*math.pi))
-    for item in data_s_flagged:
-        if item['NUMBER'] == gal:
-            lst_sersic.append(item['n'])
+
+lst_r20_density1 = []
+lst_r20_density2 = []
+lst_r20_density3 = []
+lst_r20_density4 = []
+lst_r20_sersic1 = []
+lst_r20_sersic2 = []
+lst_r20_sersic3 = []
+lst_r20_sersic4 = []
+
+for gal in lst_gal_massed1:
+        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
+        z_und = z_un['z']
+        z = z_und[0]
+        rand_ave = 0
+        for i in range(len(lst_gal_massed)):
+            rand_counted += rand_counts(z, R)
+        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
+        lst_r20_density1.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        for item in data_s_flagged:
+            if item['NUMBER'] == gal:
+                lst_r20_sersic1.append(item['n'])
+
+for gal in lst_gal_massed2:
+        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
+        z_und = z_un['z']
+        z = z_und[0]
+        rand_ave = 0
+        for i in range(len(lst_gal_massed)):
+            rand_counted += rand_counts(z, R)
+        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
+        lst_r20_density2.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        for item in data_s_flagged:
+            if item['NUMBER'] == gal:
+                lst_r20_sersic2.append(item['n'])
+
+for gal in lst_gal_massed3:
+        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
+        z_und = z_un['z']
+        z = z_und[0]
+        rand_ave = 0
+        for i in range(len(lst_gal_massed)):
+            rand_counted += rand_counts(z, R)
+        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
+        lst_r20_density3.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        for item in data_s_flagged:
+            if item['NUMBER'] == gal:
+                lst_r20_sersic3.append(item['n'])
+
+for gal in lst_gal_massed4:
+        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
+        z_und = z_un['z']
+        z = z_und[0]
+        rand_ave = 0
+        for i in range(len(lst_gal_massed)):
+            rand_counted += rand_counts(z, R)
+        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
+        lst_r20_density4.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        for item in data_s_flagged:
+            if item['NUMBER'] == gal:
+                lst_r20_sersic4.append(item['n'])
 
 
 #plotting sersic vs density#
 
-pylab.scatter(lst_sersic, lst_counts)
+pylab.plot(lst_r20_sersic1, lst_r20_density1, '.r-', label ='2.0 < z < 2.5')
+pylab.plot(lst_r20_sersic2, lst_r20_density2, '.b-', label = '1.5 < z < 2.0')
+pylab.plot(lst_r20_sersic3, lst_r20_density3, '.g-', label = '1.0 < z < 1.5')
+pylab.plot(lst_r20_sersic4, lst_r20_density4, '.purple-', label = '0.5 < z < 1.0')
 
-pylab.suptitle('Sersic Index vs Log Galaxy Number Density of All Redshifts', fontsize=20)
+pylab.suptitle('Sersic Index vs Log Galaxy Number Density of Four Redshift Bins', fontsize=17)
 pylab.xlabel('Sersic Index', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density (mpc^-2)', fontsize=15)
+pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
 pylab.xlim([0,8.5])
-pylab.ylim([0.004,0.06])
+pylab.ylim([0.000001,0.0005])
+pylab.legend(loc=1)
 pylab.yscale('log')
 
 
