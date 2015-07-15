@@ -163,10 +163,10 @@ for r in lst_r:
 pylab.scatter(lst_r, lst_density)
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
-pylab.xlabel('Radius (kpc)', fontsize=16)
+pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
 pylab.xlim([0,510])
-pylab.ylim([0.000001,0.0005])
+pylab.ylim([0.000001,0.0002])
 pylab.yscale('log')
 
 

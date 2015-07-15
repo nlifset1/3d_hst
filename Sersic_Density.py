@@ -108,7 +108,7 @@ pylab.scatter(lst_sersic, lst_nth, alpha=0.7)
 
 pylab.suptitle('Sersic Index vs Log Galaxy Number Density of All Redshifts', fontsize=17)
 pylab.xlabel('Sersic Index', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density (N_gal mpc^-2)', fontsize=15)
+pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
 pylab.xlim([0,8.5])
 pylab.ylim([0.0035,0.16])
 pylab.yscale('log')

@@ -16,14 +16,12 @@ os.chdir('C:\\3d_hst')
 data = ascii.read("aegis_3dhst.v4.1.cat")
 data_fast = ascii.read("aegis_3dhst.v4.1.fout")
 data_z = ascii.read("aegis_3dhst.v4.0.sfr")
-data_s = ascii.read("aegis_3dhst.v4.1_f160w.galfit")
 
 #flag out the bad stuff#
 idx, = np.where((data["use_phot"] == 1.0) & (data_fast["lsfr"] != -99))
 data_fast_flagged = data_fast[idx]
 data_flagged = data[idx]
 data_z_flagged = data_z[idx]
-data_s_flagged = data_S[idx]
 
 
 #creating a function for finding number of galaxies within a radius R (kpc)#
@@ -141,125 +139,97 @@ for gal in lst_gal_edged:
         if (gal_info['lmass'] >= 11.0):
             lst_gal_massed.append(gal)
 
-
-
-#making lists for the plots of sersic vs density, R is in KPC#
-lst_r = [20,50,100,200]
-
-lst_r20_density = []
-lst_r50_density = []
-lst_r100_density = []
-lst_r200_density = []
-lst_r20_sersic = []
-lst_r50_sersic = []
-lst_r100_sersic = []
-lst_r200_sersic = []
-
-
-#PLOT 1#
-#R = 20 kpc#
+#splitting the massed list into four redshift bins#
+#bin 1: 2.0 < z < 2.5#
+#bin 2: 1.5 < z < 2.0#
+#bin 3: 1.0 < z < 1.5#
+#bin 4: 0.5 < z < 2.0#
+lst_gal_massed1 = []
+lst_gal_massed2 = []
+lst_gal_massed3 = []
+lst_gal_massed4 = []
 for gal in lst_gal_massed:
+    gal_info = data_z_flagged[(data_z_flagged['id'] == gal)]
+    if gal_info['z'] >= 2.0:
+        lst_gal_massed1.append(gal)
+    elif gal_info['z'] >= 1.5:
+        lst_gal_massed2.append(gal)
+    elif gal_info['z'] >= 1.0:
+        lst_gal_massed3.append(gal)
+    elif gal_info['z'] >= 0.5:
+        lst_gal_massed4.append(gal)
+
+#making lists for the plots of radius vs density, r is in KPC#
+lst_r = [20,50,100,200,500]
+lst_density1 = []
+lst_density2 = []
+lst_density3 = []
+lst_density4 = []
+for r in lst_r:
+    density_total1 = 0
+    for gal in lst_gal_massed1:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        #getting average background density#
-        rand_ave = 0
-        for i in range(10):
-            rand_counted += rand_counts(z, 20)
-        rand_ave = (float(rand_counted)/(10))
-        lst_r20_density.append((float(Counts(gal, z, 20)) - rand_ave)/((20**2)*math.pi))
-        for item in data_s_flagged:
-            if item['NUMBER'] == gal:
-                lst_r20_sersic.append(item['n'])
+        within = float(Counts(gal, z, r) - rand_counts(z, r))
+        density = within/((r**2)*math.pi)
+        density_total1 += density
+    #averaging density of each galaxy at each radius#
+    density_ave1 = float(density_total1)/len(lst_gal_massed1)
+    lst_density1.append(density_ave1)
 
-
-#PLOT 2#
-#R = 50 kpc#
-for gal in lst_gal_massed:
+    density_total2 = 0
+    for gal in lst_gal_massed2:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        #getting average background density#
-        rand_ave = 0
-        for i in range(10):
-            rand_counted += rand_counts(z, 50)
-        rand_ave = (float(rand_counted)/(10))
-        lst_r50_density.append((float(Counts(gal, z, 50)) - rand_ave)/((50**2)*math.pi))
-        for item in data_s_flagged:
-            if item['NUMBER'] == gal:
-                lst_r50_sersic.append(item['n'])
+        within = float(Counts(gal, z, r) - rand_counts(z, r))
+        density = within/((r**2)*math.pi)
+        density_total2 += density
+    #averaging density of each galaxy at each radius#
+    density_ave2 = float(density_total2)/len(lst_gal_massed2)
+    lst_density2.append(density_ave2)
 
-
-#PLOT 3#
-#R = 100 kpc#
-for gal in lst_gal_massed:
+    density_total3 = 0
+    for gal in lst_gal_massed3:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        #getting average background density#
-        rand_ave = 0
-        for i in range(10):
-            rand_counted += rand_counts(z, 100)
-        rand_ave = (float(rand_counted)/(10))
-        lst_r100_density.append((float(Counts(gal, z, 100)) - rand_ave)/((100**2)*math.pi))
-        for item in data_s_flagged:
-            if item['NUMBER'] == gal:
-                lst_r100_sersic.append(item['n'])
+        within = float(Counts(gal, z, r) - rand_counts(z, r))
+        density = within/((r**2)*math.pi)
+        density_total3 += density
+    #averaging density of each galaxy at each radius#
+    density_ave3 = float(density_total3)/len(lst_gal_massed3)
+    lst_density3.append(density_ave3)
 
-
-#PLOT 4#
-#R = 200 kpc#
-for gal in lst_gal_massed:
+    density_total4 = 0
+    for gal in lst_gal_massed4:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        #getting average background density#
-        rand_ave = 0
-        for i in range(10):
-            rand_counted += rand_counts(z, 200)
-        rand_ave = (float(rand_counted)/(10))
-        lst_r200_density.append((float(Counts(gal, z, 200)) - rand_ave)/((200**2)*math.pi))
-        for item in data_s_flagged:
-            if item['NUMBER'] == gal:
-                lst_r200_sersic.append(item['n'])
+        within = float(Counts(gal, z, r) - rand_counts(z, r))
+        density = within/((r**2)*math.pi)
+        density_total4 += density
+    #averaging density of each galaxy at each radius#
+    density_ave4 = float(density_total4)/len(lst_gal_massed4)
+    lst_density4.append(density_ave4)
 
 
-#plotting sersic vs density#
+#plotting radius vs density#
 
-gs=GridSpec(2,2)
-a1=pylab.subplot(gs[0,1])
-a2=pylab.subplot(gs[1,1])
-a3=pylab.subplot(gs[1,0])
-a4=pylab.subplot(gs[1,1])
+pylab.plot(lst_r, lst_density1, '.r-', label = '2.0 < z < 2.5')
+pylab.plot(lst_r, lst_density2, '.b-', label = '1.5 < z < 2.0')
+pylab.plot(lst_r, lst_density3, '.g-', label = '1.0 < z < 1.5')
+pylab.plot(lst_r, lst_density4, '.purple-', label = '0.5 < z < 1.0')
 
-a1.plot(lst_r20_sersic, lst_r20_density, '.r-', label ='Radius 20 kpc')
-a2.plot(lst_r50_sersic, lst_r50_density, '.b-', label = 'Radius 50 kpc')
-a3.plot(lst_r100_sersic, lst_r100_density, '.g-', label = 'Radius 100 kpc')
-a4.plot(lst_r200_sersic, lst_r200_density, '.purple-', label = 'Radius 200 kpc')
+pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Redshift Bins', fontsize=17)
+pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
+pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
+pylab.legend(loc=1)
+pylab.xlim([0,510])
+pylab.ylim([0.000001,0.0002])
+pylab.yscale('log')
 
-pylab.suptitle('Sersic Index vs Log Galaxy Number Density at Four Aperture Radii', fontsize=17)
-pylab.xlabel('Sersic Index', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
-
-a1.set_xlim([0,8.5])
-a2.set_xlim([0,8.5])
-a3.set_xlim([0,8.5])
-a4.set_xlim([0,8.5])
-
-a1.ylim([0.000001,0.0002])
-a2.ylim([0.000001,0.0002])
-a3.ylim([0.000001,0.0002])
-a4.ylim([0.000001,0.0005])
-
-a1.legend(loc=1)
-a2.legend(loc=1)
-a3.legend(loc=1)
-a4.legend(loc=1)
-
-a1.yscale('log')
-a2.yscale('log')
-a3.yscale('log')
-a4.yscale('log')
 
 
 pylab.ion()

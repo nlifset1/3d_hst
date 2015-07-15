@@ -140,87 +140,124 @@ for gal in lst_gal_edged:
             lst_gal_massed.append(gal)
 
 
-#making lists for the plots of mass vs density, R is in MPC#
-R = 20
+#making lists for the plots of sersic vs density, R is in KPC#
+lst_r = [20,50,100,200]
 
-lst_r20_density1 = []
-lst_r20_density2 = []
-lst_r20_density3 = []
-lst_r20_density4 = []
-lst_r20_sersic1 = []
-lst_r20_sersic2 = []
-lst_r20_sersic3 = []
-lst_r20_sersic4 = []
+lst_r20_density = []
+lst_r50_density = []
+lst_r100_density = []
+lst_r200_density = []
+lst_r20_lmass = []
+lst_r50_lmass = []
+lst_r100_lmass = []
+lst_r200_lmass = []
 
-for gal in lst_gal_massed1:
+
+#PLOT 1#
+#R = 20 kpc#
+for gal in lst_gal_massed:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        rand_ave = 0
-        for i in range(len(lst_gal_massed)):
-            rand_counted += rand_counts(z, R)
-        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
-        lst_r20_density1.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        #fiding average background density#
+        rand_counted = 0
+        for i in range(10):
+            rand_counted += rand_counts(z, 20)
+        rand_ave = (float(rand_counted)/(10))
+        lst_r20_density.append((float(Counts(gal, z, 20)) - rand_ave)/((20**2)*math.pi))
         for item in data_fast_flagged:
             if item['id'] == gal:
-                lst_r20_lmass1.append(item['lmass'])
+                lst_r20_lmass.append(item['lmass'])
 
-for gal in lst_gal_massed2:
+
+#PLOT 2#
+#R = 50 kpc#
+for gal in lst_gal_massed:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        rand_ave = 0
-        for i in range(len(lst_gal_massed)):
-            rand_counted += rand_counts(z, R)
-        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
-        lst_r20_density2.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        #fiding average background density#
+        rand_counted = 0
+        for i in range(10):
+            rand_counted += rand_counts(z, 50)
+        rand_ave = (float(rand_counted)/(10))
+        lst_r50_density.append((float(Counts(gal, z, 50)) - rand_ave)/((50**2)*math.pi))
         for item in data_fast_flagged:
             if item['id'] == gal:
-                lst_r20_lmass2.append(item['lmass'])
+                lst_r50_lmass.append(item['lmass'])
 
-for gal in lst_gal_massed3:
+
+#PLOT 3#
+#R = 100 kpc#
+for gal in lst_gal_massed:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        rand_ave = 0
-        for i in range(len(lst_gal_massed)):
-            rand_counted += rand_counts(z, R)
-        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
-        lst_r20_density3.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        #fiding average background density#
+        rand_counted = 0
+        for i in range(10):
+            rand_counted += rand_counts(z, 100)
+        rand_ave = (float(rand_counted)/(10))
+        lst_r100_density.append((float(Counts(gal, z, 100)) - rand_ave)/((100**2)*math.pi))
         for item in data_fast_flagged:
             if item['id'] == gal:
-                lst_r20_lmass3.append(item['lmass'])
+                lst_r100_lmass.append(item['lmass'])
 
-for gal in lst_gal_massed4:
+
+#PLOT 4#
+#R = 200 kpc#
+for gal in lst_gal_massed:
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        rand_ave = 0
-        for i in range(len(lst_gal_massed)):
-            rand_counted += rand_counts(z, R)
-        rand_ave = (float(rand_counted)/(len(lst_gal_massed)))
-        lst_r20_density4.append((float(Counts(gal, z, R)) - rand_ave)/((R**2)*math.pi))
+        #fiding average background density#
+        rand_counted = 0
+        for i in range(10):
+            rand_counted += rand_counts(z, 200)
+        rand_ave = (float(rand_counted)/(10))
+        lst_r200_density.append((float(Counts(gal, z, 200)) - rand_ave)/((200**2)*math.pi))
         for item in data_fast_flagged:
             if item['id'] == gal:
-                lst_r20_lmass4.append(item['lmass'])
+                lst_r200_lmass.append(item['lmass'])
 
 
-#plotting lmass vs density#
+#plotting sersic vs density#
 
-pylab.plot(lst_r20_lmass1, lst_r20_density1, '.r-', label ='2.0 < z < 2.5')
-pylab.plot(lst_r20_lmass2, lst_r20_density2, '.b-', label = '1.5 < z < 2.0')
-pylab.plot(lst_r20_lmass3, lst_r20_density3, '.g-', label = '1.0 < z < 1.5')
-pylab.plot(lst_r20_lmass4, lst_r20_density4, '.purple-', label = '0.5 < z < 1.0')
+gs=GridSpec(2,2)
+a1=pylab.subplot(gs[0,1])
+a2=pylab.subplot(gs[1,1])
+a3=pylab.subplot(gs[1,0])
+a4=pylab.subplot(gs[1,1])
 
-pylab.suptitle('Log Mass vs Log Galaxy Number Density of Four Redshift Bins', fontsize=17)
+a1.plot(lst_r20_lmass, lst_r20_density, '.r-', label ='Radius 20 kpc')
+a2.plot(lst_r50_lmass, lst_r50_density, '.b-', label = 'Radius 50 kpc')
+a3.plot(lst_r100_lmass, lst_r100_density, '.g-', label = 'Radius 100 kpc')
+a4.plot(lst_r200_lmass, lst_r200_density, '.purple-', label = 'Radius 200 kpc')
+
+pylab.suptitle('Log Mass vs Log Galaxy Number Density at Four Aperture Radii', fontsize=17)
 pylab.xlabel('Log Mass', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
-pylab.xlim([10.9, 12.0])
-pylab.ylim([0.000001,0.0005])
-pylab.legend(loc=1)
-pylab.yscale('log')
+
+a1.set_xlim([10.96,11.6])
+a2.set_xlim([10.96,11.6])
+a3.set_xlim([10.96,11.6])
+a4.set_xlim([10.96,11.6])
+
+a1.ylim([0.000001,0.0002])
+a2.ylim([0.000001,0.0002])
+a3.ylim([0.000001,0.0002])
+a4.ylim([0.000001,0.0002])
+
+a1.legend(loc=1)
+a2.legend(loc=1)
+a3.legend(loc=1)
+a4.legend(loc=1)
+
+a1.yscale('log')
+a2.yscale('log')
+a3.yscale('log')
+a4.yscale('log')
 
 
 pylab.ion()
 pylab.show()
-
