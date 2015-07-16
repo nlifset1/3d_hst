@@ -2,12 +2,10 @@ print "start"
 from astropy.io import ascii
 import numpy as np
 from astropy.io import fits
-import astropy.constants
 import matplotlib.pyplot as plt
 import pylab
 import math
 import random
-from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
 os.chdir('C:\\3d_hst')
@@ -168,7 +166,8 @@ for gal in lst_gal_massed:
         lst_r20_density.append((float(Counts(gal, z, 20)) - rand_ave)/((20**2)*math.pi))
         for item in data_fast_flagged:
             if item['id'] == gal:
-                lst_r20_sfr.append(item['lsfr']) 
+                lst_r20_sfr.append(item['lsfr'])
+                break
 
 #PLOT 2#
 #R = 50 kpc#
@@ -185,6 +184,7 @@ for gal in lst_gal_massed:
         for item in data_fast_flagged:
             if item['id'] == gal:
                 lst_r50_sfr.append(item['lsfr'])
+                break
 
 
 #PLOT 3#
@@ -202,6 +202,7 @@ for gal in lst_gal_massed:
         for item in data_fast_flagged:
             if item['id'] == gal:
                 lst_r100_sfr.append(item['lsfr'])
+                break
 
 
 #PLOT 4#
@@ -219,6 +220,7 @@ for gal in lst_gal_massed:
         for item in data_fast_flagged:
             if item['id'] == gal:
                 lst_r200_sfr.append(item['lsfr'])
+                break
 
 
 #plotting sfr vs density#
@@ -234,7 +236,7 @@ a4=pylab.subplot(gs[1,1])
 a1.plot(lst_r20_sfr, lst_r20_density, '.r-', label ='Radius 20 kpc')
 a2.plot(lst_r50_sfr, lst_r50_density, '.b-', label = 'Radius 50 kpc')
 a3.plot(lst_r100_sfr, lst_r100_density, '.g-', label = 'Radius 100 kpc')
-a4.plot(lst_r200_sfr, lst_r200_density, '.purple-', label = 'Radius 200 kpc')
+a4.plot(lst_r200_sfr, lst_r200_density, '.y-', label = 'Radius 200 kpc')
 
 pylab.suptitle('Log SFR vs Log Galaxy Number Density at Four Aperture Radii', fontsize=17)
 pylab.xlabel('Log Star Formation Rate', fontsize=16)
@@ -245,10 +247,10 @@ a2.set_xlim([-3,3])
 a3.set_xlim([-3,3])
 a4.set_xlim([-3,3])
 
-a1.ylim([0.000001,0.0002])
-a2.ylim([0.000001,0.0002])
-a3.ylim([0.000001,0.0002])
-a4.ylim([0.000001,0.0002])
+a1.ylim([0.0000005,0.002])
+a2.ylim([0.0000005,0.002])
+a3.ylim([0.0000005,0.002])
+a4.ylim([0.0000005,0.002])
 
 a1.legend(loc=1)
 a2.legend(loc=1)

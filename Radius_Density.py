@@ -2,16 +2,12 @@ print "start"
 from astropy.io import ascii
 import numpy as np
 from astropy.io import fits
-import astropy.constants
 import matplotlib.pyplot as plt
 import pylab
 import math
 import random
-from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
-from astropy import units as u
-from astropy.coordinates import SkyCoord
 os.chdir('C:\\3d_hst')
 
 #bring in the data#
@@ -142,7 +138,7 @@ for gal in lst_gal_edged:
             lst_gal_massed.append(gal)
 
 #making lists for the plots of radius vs density, r is in KPC#
-lst_r = [20,50,100,200,500]
+lst_r = [20,50,100,200]
 lst_density = []
 for r in lst_r:
     density_total = 0
@@ -165,8 +161,8 @@ pylab.scatter(lst_r, lst_density)
 pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.xlim([0,510])
-pylab.ylim([0.000001,0.0002])
+pylab.xlim([0,210])
+pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
 
 

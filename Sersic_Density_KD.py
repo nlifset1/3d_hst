@@ -2,12 +2,10 @@ print "start"
 from astropy.io import ascii
 import numpy as np
 from astropy.io import fits
-import astropy.constants
 import matplotlib.pyplot as plt
 import pylab
 import math
 import random
-from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
 os.chdir('C:\\3d_hst')
@@ -171,6 +169,7 @@ for gal in lst_gal_massed:
         for item in data_s_flagged:
             if item['NUMBER'] == gal:
                 lst_r20_sersic.append(item['n'])
+                break
 
 
 #PLOT 2#
@@ -188,6 +187,7 @@ for gal in lst_gal_massed:
         for item in data_s_flagged:
             if item['NUMBER'] == gal:
                 lst_r50_sersic.append(item['n'])
+                break
 
 
 #PLOT 3#
@@ -205,6 +205,7 @@ for gal in lst_gal_massed:
         for item in data_s_flagged:
             if item['NUMBER'] == gal:
                 lst_r100_sersic.append(item['n'])
+                break
 
 
 #PLOT 4#
@@ -222,6 +223,7 @@ for gal in lst_gal_massed:
         for item in data_s_flagged:
             if item['NUMBER'] == gal:
                 lst_r200_sersic.append(item['n'])
+                break
 
 
 #plotting sersic vs density#
@@ -235,7 +237,7 @@ a4=pylab.subplot(gs[1,1])
 a1.plot(lst_r20_sersic, lst_r20_density, '.r-', label ='Radius 20 kpc')
 a2.plot(lst_r50_sersic, lst_r50_density, '.b-', label = 'Radius 50 kpc')
 a3.plot(lst_r100_sersic, lst_r100_density, '.g-', label = 'Radius 100 kpc')
-a4.plot(lst_r200_sersic, lst_r200_density, '.purple-', label = 'Radius 200 kpc')
+a4.plot(lst_r200_sersic, lst_r200_density, '.y-', label = 'Radius 200 kpc')
 
 pylab.suptitle('Sersic Index vs Log Galaxy Number Density at Four Aperture Radii', fontsize=17)
 pylab.xlabel('Sersic Index', fontsize=16)
@@ -246,10 +248,10 @@ a2.set_xlim([0,8.5])
 a3.set_xlim([0,8.5])
 a4.set_xlim([0,8.5])
 
-a1.ylim([0.000001,0.0002])
-a2.ylim([0.000001,0.0002])
-a3.ylim([0.000001,0.0002])
-a4.ylim([0.000001,0.0005])
+a1.ylim([0.0000005,0.002])
+a2.ylim([0.0000005,0.002])
+a3.ylim([0.0000005,0.002])
+a4.ylim([0.0000005,0.002])
 
 a1.legend(loc=1)
 a2.legend(loc=1)

@@ -109,9 +109,9 @@ pylab.scatter(lst_z, lst_nth, alpha=0.7)
 
 pylab.suptitle('Redshift vs Galaxy Number Density', fontsize=20)
 pylab.xlabel('Redshift', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $mpc^{-2}$)', fontsize=15)
+pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
 pylab.xlim([0.4,2.6])
-pylab.ylim([0.000001,0.0002])
+pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
 
 

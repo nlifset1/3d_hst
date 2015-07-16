@@ -137,97 +137,41 @@ for gal in lst_gal_edged:
         if (gal_info['lmass'] >= 11.0):
             lst_gal_massed.append(gal)
 
-#splitting the massed list into four redshift bins#
-#bin 1: 2.0 < z < 2.5#
-#bin 2: 1.5 < z < 2.0#
-#bin 3: 1.0 < z < 1.5#
-#bin 4: 0.5 < z < 2.0#
-lst_gal_massed1 = []
-lst_gal_massed2 = []
-lst_gal_massed3 = []
-lst_gal_massed4 = []
-for gal in lst_gal_massed:
-    gal_info = data_z_flagged[(data_z_flagged['id'] == gal)]
-    if gal_info['z'] >= 2.0:
-        lst_gal_massed1.append(gal)
-    elif gal_info['z'] >= 1.5:
-        lst_gal_massed2.append(gal)
-    elif gal_info['z'] >= 1.0:
-        lst_gal_massed3.append(gal)
-    elif gal_info['z'] >= 0.5:
-        lst_gal_massed4.append(gal)
-
 #making lists for the plots of radius vs density, r is in KPC#
 lst_r = [20,50,100,200]
-lst_density1 = []
-lst_density2 = []
-lst_density3 = []
-lst_density4 = []
+lst_density = []
+lst_rand = []
 for r in lst_r:
-    density_total1 = 0
-    for gal in lst_gal_massed1:
+    density_total = 0
+    density_rand_total = 0
+    for gal in lst_gal_massed:
+        #finding number density of each galaxy at given radius and averaging them#
         z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
         z_und = z_un['z']
         z = z_und[0]
-        within = float(Counts(gal, z, r) - rand_counts(z, r))
+        within = float(Counts(gal, z, r))
+        within_rand = float(rand_counts(z, r))
         density = within/((r**2)*math.pi)
-        density_total1 += density
-    #averaging density of each galaxy at each radius#
-    density_ave1 = float(density_total1)/len(lst_gal_massed1)
-    lst_density1.append(density_ave1)
-
-    density_total2 = 0
-    for gal in lst_gal_massed2:
-        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
-        z_und = z_un['z']
-        z = z_und[0]
-        within = float(Counts(gal, z, r) - rand_counts(z, r))
-        density = within/((r**2)*math.pi)
-        density_total2 += density
-    #averaging density of each galaxy at each radius#
-    density_ave2 = float(density_total2)/len(lst_gal_massed2)
-    lst_density2.append(density_ave2)
-
-    density_total3 = 0
-    for gal in lst_gal_massed3:
-        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
-        z_und = z_un['z']
-        z = z_und[0]
-        within = float(Counts(gal, z, r) - rand_counts(z, r))
-        density = within/((r**2)*math.pi)
-        density_total3 += density
-    #averaging density of each galaxy at each radius#
-    density_ave3 = float(density_total3)/len(lst_gal_massed3)
-    lst_density3.append(density_ave3)
-
-    density_total4 = 0
-    for gal in lst_gal_massed4:
-        z_un = data_z_flagged[(data_z_flagged['id'] == gal)]
-        z_und = z_un['z']
-        z = z_und[0]
-        within = float(Counts(gal, z, r) - rand_counts(z, r))
-        density = within/((r**2)*math.pi)
-        density_total4 += density
-    #averaging density of each galaxy at each radius#
-    density_ave4 = float(density_total4)/len(lst_gal_massed4)
-    lst_density4.append(density_ave4)
+        density_rand = within_rand/((r**2)*math.pi)
+        density_total += density
+        density_rand_total += density_rand
+    density_ave = float(density_total)/len(lst_gal_massed)
+    density_rand_ave = float(density_rand_total)/len(lst_gal_massed)
+    lst_density.append(density_ave)
+    lst_rand.append(density_rand_ave)
 
 
 #plotting radius vs density#
 
-pylab.plot(lst_r, lst_density1, '.r-', label = '2.0 < z < 2.5')
-pylab.plot(lst_r, lst_density2, '.b-', label = '1.5 < z < 2.0')
-pylab.plot(lst_r, lst_density3, '.g-', label = '1.0 < z < 1.5')
-pylab.plot(lst_r, lst_density4, '.y-', label = '0.5 < z < 1.0')
+pylab.plot(lst_r, lst_density, '.r-', label = 'Selected Massive Galaxies')
+pylab.plot(lst_r, lst_rand, '.b-', label = 'Average Background Number Density')
 
-pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Redshift Bins', fontsize=17)
+pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.legend(loc=1)
 pylab.xlim([0,210])
 pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
-
 
 
 pylab.ion()

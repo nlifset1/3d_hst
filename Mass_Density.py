@@ -110,7 +110,7 @@ pylab.suptitle('Log Mass vs Log Galaxy Number Density of All Redshifts', fontsiz
 pylab.xlabel('Log Mass', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
 pylab.xlim([10.96,11.6])
-pylab.ylim([0.000001,0.0002])
+pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
 
 
