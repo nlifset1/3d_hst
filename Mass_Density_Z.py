@@ -1,7 +1,6 @@
 print "start"
 from astropy.io import ascii
 import numpy as np
-from astropy.io import fits
 import astropy.constants
 import matplotlib.pyplot as plt
 import pylab
@@ -130,7 +129,6 @@ for gal in lst_gal1:
 
 #MEDIAN POINTS#
 #initializing lists for each of the 10 lmass bins#
-mass_total1_1 = []
 mass_total1_2 = []
 mass_total1_3 = []
 mass_total1_4 = []
@@ -139,7 +137,6 @@ mass_total1_6 = []
 mass_total1_7 = []
 mass_total1_8 = []
 
-density_total1_1 = []
 density_total1_2 = []
 density_total1_3 = []
 density_total1_4 = []
@@ -150,10 +147,7 @@ density_total1_8 = []
 
 #sorting the already calculated lmass and density data into the 10 lists#
 for i in range(len(lst_mass1)):
-    if lst_mass1[i] > 11.7:
-        mass_total1_1.append(lst_mass1[i])
-        density_total1_1.append(lst_nth1[i])
-    elif lst_mass1[i] > 11.6:
+    if lst_mass1[i] > 11.6:
         mass_total1_2.append(lst_mass1[i])
         density_total1_2.append(lst_nth1[i])
     elif lst_mass1[i] > 11.5:
@@ -221,7 +215,6 @@ for gal in lst_gal2:
 
 #MEDIAN POINTS#
 #initializing lists for each of the 10 lmass bins#
-mass_total2_1 = []
 mass_total2_2 = []
 mass_total2_3 = []
 mass_total2_4 = []
@@ -229,10 +222,7 @@ mass_total2_5 = []
 mass_total2_6 = []
 mass_total2_7 = []
 mass_total2_8 = []
-mass_total2_9 = []
-mass_total2_10 = []
 
-density_total2_1 = []
 density_total2_2 = []
 density_total2_3 = []
 density_total2_4 = []
@@ -240,15 +230,10 @@ density_total2_5 = []
 density_total2_6 = []
 density_total2_7 = []
 density_total2_8 = []
-density_total2_9 = []
-density_total2_10 = []
 
 #sorting the already calculated lmass and density data into the 10 lists#
 for i in range(len(lst_mass2)):
-    if lst_mass2[i] > 11.7:
-        mass_total2_1.append(lst_mass2[i])
-        density_total2_1.append(lst_nth2[i])
-    elif lst_mass2[i] > 11.6:
+    if lst_mass2[i] > 11.6:
         mass_total2_2.append(lst_mass2[i])
         density_total2_2.append(lst_nth2[i])
     elif lst_mass2[i] > 11.5:
@@ -318,37 +303,23 @@ for gal in lst_gal3:
 
 #MEDIAN POINTS#
 #initializing lists for each of the 10 lmass bins#
-mass_total3_1 = []
-mass_total3_2 = []
 mass_total3_3 = []
 mass_total3_4 = []
 mass_total3_5 = []
 mass_total3_6 = []
 mass_total3_7 = []
 mass_total3_8 = []
-mass_total3_9 = []
-mass_total3_10 = []
 
-density_total3_1 = []
-density_total3_2 = []
 density_total3_3 = []
 density_total3_4 = []
 density_total3_5 = []
 density_total3_6 = []
 density_total3_7 = []
 density_total3_8 = []
-density_total3_9 = []
-density_total3_10 = []
 
 #sorting the already calculated lmass and density data into the 10 lists#
 for i in range(len(lst_mass3)):
-    if lst_mass3[i] > 11.7:
-        mass_total3_1.append(lst_mass3[i])
-        density_total3_1.append(lst_nth3[i])
-    elif lst_mass3[i] > 11.6:
-        mass_total3_2.append(lst_mass3[i])
-        density_total3_2.append(lst_nth3[i])
-    elif lst_mass3[i] > 11.5:
+    if lst_mass3[i] > 11.5:
         mass_total3_3.append(lst_mass3[i])
         density_total3_3.append(lst_nth3[i])
     elif lst_mass3[i] > 11.4:
@@ -389,7 +360,7 @@ lst_mass_median3 = [mass_median3_3, mass_median3_4, mass_median3_5, mass_median3
 
 
 #calculating standard deviation for the median points#
-sigma3_4 = np.std(density_total3_3)
+sigma3_3 = np.std(density_total3_3)
 sigma3_4 = np.std(density_total3_4)
 sigma3_5 = np.std(density_total3_5)
 sigma3_6 = np.std(density_total3_6)
@@ -420,8 +391,6 @@ mass_total4_5 = []
 mass_total4_6 = []
 mass_total4_7 = []
 mass_total4_8 = []
-mass_total4_9 = []
-mass_total4_10 = []
 
 density_total4_1 = []
 density_total4_2 = []
@@ -431,8 +400,6 @@ density_total4_5 = []
 density_total4_6 = []
 density_total4_7 = []
 density_total4_8 = []
-density_total4_9 = []
-density_total4_10 = []
 
 #sorting the already calculated lmass and density data into the 10 lists#
 for i in range(len(lst_mass4)):
@@ -529,7 +496,7 @@ pylab.suptitle("Log Mass vs Galaxy Number Density in Four Redshift Bins", fontsi
 fig.text(0.44, 0.01, "Log Mass", fontsize=18)
 fig.text(0.01, 0.67, "Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", rotation = "vertical", fontsize=18)
 
-pylab.xlim([10.96,14.1])
+pylab.xlim([10.96,11.8])
 pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
 
