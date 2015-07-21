@@ -150,9 +150,9 @@ for r in lst_r:
         z_und = z_un['z']
         z = z_und[0]
         within = float(Counts(gal, z, r))
-        within_rand = float(rand_counts(z, r))
+        within_rand = float(rand_counts(z, r)+rand_counts(z, r))/2.0
         density = within/((r**2)*math.pi)
-        density_rand = within_rand/((r**2)*math.pi)
+        density_rand = within_rand/((r**2.0)*math.pi)
         density_total += density
         density_rand_total += density_rand
     density_ave = float(density_total)/len(lst_gal_massed)
@@ -163,15 +163,17 @@ for r in lst_r:
 
 #plotting radius vs density#
 
-pylab.plot(lst_r, lst_density, '.r-', label = 'Selected Massive Galaxies')
-pylab.plot(lst_r, lst_rand, '.b-', label = 'Average Background Number Density')
+pylab.plot(lst_r, lst_density, marker = 'o', markeredgecolor='none', color='b', linestyle='-', label = 'Selected Massive Galaxies')
+pylab.plot(lst_r, lst_rand, marker = 'o', markeredgecolor='none', color='r', linestyle='-', label = 'Average Background Number Density')
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.xlim([0,210])
+pylab.xlim([10,210])
 pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
+pylab.xscale('log')
+pylab.legend(loc=1)
 
 
 pylab.ion()

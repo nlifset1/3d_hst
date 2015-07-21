@@ -96,7 +96,7 @@ for gal in lst_gal_1:
 #bin 1: 2.0 < z < 2.5#
 #bin 2: 1.5 < z < 2.0#
 #bin 3: 1.0 < z < 1.5#
-#bin 4: 0.5 < z < 2.0#
+#bin 4: 0.5 < z < 1.0#
 lst_gal1 = []
 lst_gal2 = []
 lst_gal3 = []
@@ -287,7 +287,7 @@ sigma2_8 = np.std(density_total2_8)
 lst_density_median2 = [density_median2_2, density_median2_3, density_median2_4, density_median2_5, density_median2_6, density_median2_7, density_median2_8]
 lst_mass_median2 = [mass_median2_2, mass_median2_3, mass_median2_4, mass_median2_5, mass_median2_6, mass_median2_7, mass_median2_8]
 
-lst_sigma1 = [sigma2_2, sigma2_3, sigma2_4, sigma2_5, sigma2_6, sigma2_7, sigma2_8]
+lst_sigma2 = [sigma2_2, sigma2_3, sigma2_4, sigma2_5, sigma2_6, sigma2_7, sigma2_8]
 
 
 #PLOT3#
@@ -298,7 +298,7 @@ for gal in lst_gal3:
     for item in data_flagged:
         if (item['id'] == gal[0]) & (item['field'] == gal[1]):
             lst_mass3.append(item['lmass'])
-            lst_nth1.append(nth_nearest(gal[0], gal[1], N))
+            lst_nth3.append(nth_nearest(gal[0], gal[1], N))
             break
 
 #MEDIAN POINTS#
@@ -367,7 +367,7 @@ sigma3_6 = np.std(density_total3_6)
 sigma3_7 = np.std(density_total3_7)
 sigma3_8 = np.std(density_total3_8)
 
-lst_sigma1 = [sigma3_3, sigma3_4, sigma3_5, sigma3_6, sigma3_7, sigma3_8]
+lst_sigma3 = [sigma3_3, sigma3_4, sigma3_5, sigma3_6, sigma3_7, sigma3_8]
 
 
 #PLOT4#
@@ -462,7 +462,7 @@ sigma4_6 = np.std(density_total4_6)
 sigma4_7 = np.std(density_total4_7)
 sigma4_8 = np.std(density_total4_8)
 
-lst_sigma1 = [sigma4_1, sigma4_2, sigma4_3, sigma4_4, sigma4_5, sigma4_6, sigma4_7, sigma4_8]
+lst_sigma4 = [sigma4_1, sigma4_2, sigma4_3, sigma4_4, sigma4_5, sigma4_6, sigma4_7, sigma4_8]
 
 
 #PLOTTING#
