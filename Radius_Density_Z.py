@@ -158,7 +158,7 @@ for gal in lst_gal_massed:
         lst_gal_massed4.append(gal)
 
 #making lists for the plots of radius vs density, r is in KPC#
-lst_r = [100,250,500,1000]
+lst_r = [750,1000]
 lst_density1 = []
 lst_density2 = []
 lst_density3 = []
@@ -215,16 +215,16 @@ for r in lst_r:
 
 #plotting radius vs density#
 
-pylab.plot(lst_r, lst_density1, '.r-', label = '2.0 < z < 2.5')
-pylab.plot(lst_r, lst_density2, '.b-', label = '1.5 < z < 2.0')
-pylab.plot(lst_r, lst_density3, '.g-', label = '1.0 < z < 1.5')
-pylab.plot(lst_r, lst_density4, '.y-', label = '0.5 < z < 1.0')
+pylab.plot(lst_r, lst_density1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '2.0 < z < 2.5')
+pylab.plot(lst_r, lst_density2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '1.5 < z < 2.0')
+pylab.plot(lst_r, lst_density3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '1.0 < z < 1.5')
+pylab.plot(lst_r, lst_density4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '0.5 < z < 1.0')
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Redshift Bins', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
 pylab.legend(loc=1)
-pylab.xlim([10,1010])
+pylab.xlim([730,1050])
 pylab.ylim([0.0000005,0.002])
 pylab.yscale('log')
 pylab.xscale('log')
