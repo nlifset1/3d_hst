@@ -1,20 +1,71 @@
 print "start"
 from astropy.io import ascii
 import numpy as np
-from astropy.io import fits
-import matplotlib.pyplot as plt
-import pylab
 import math
 import random
+import astropy.constants
+from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
+from astropy.table import Table
 os.chdir('C:\\3d_hst')
 
 #bring in the data#
 data = ascii.read("3dhst_master.phot.v4.1.cat")
 
 #flag out the bad stuff#
-data_flagged = data[(data["use_phot"] == 1.0)]
+idx, = np.where((data["use_phot"] == 1.0))
+data_flagged = data[idx]
+
+#create a function for finding local galaxy density (projected surface density)#
+def nth_nearest(gal_id, gal_field, N):
+    #creating a redshift range about the chosen galaxy#
+    z_un = data_flagged[(data_flagged['id'] == gal_id) & (data_flagged['field'] == gal_field)]
+    z_und = z_un['z_peak']
+    z = z_und[0]
+    z_bin = data_flagged[((data_flagged['z_peak'] >= (z - 0.08)) & (data_flagged['z_peak'] <= (z + 0.08)))]
+
+    #create a list of ids of galaxies in z range and with lmass above 9.415#
+    lst_id =[]
+    for gal in z_bin:
+        if (gal['id'] != gal_id) or (gal['field'] != gal_field):
+            if gal['lmass'] >= 9.415:
+                lst_id.append([gal['id'], gal['field']])
+
+    #finding kpc per radian ratio at given redshift z#
+    kpc_arcmin = cosmo.kpc_proper_per_arcmin(z)
+    kpc_degrees = kpc_arcmin*60
+    kpc_radians = kpc_degrees/(math.pi/180)
+    kpc_radian = kpc_radians.value
+    
+    #create a list of distances from galaxy gal_id to each galaxy in z range#
+    lst_dist = []
+    #convert from degrees to radians#
+    ra1_ = (z_un['ra'])*(math.pi/180)
+    ra1 = ra1_[0]
+    dec1_ = (z_un['dec'])*(math.pi/180)
+    dec1 = dec1_[0]
+    #making a list of distances to galaxies in the z-bin in radians#
+    lst_radians = []
+    for gal in lst_id:
+        #pulling the necessary info of each galaxy in the range#
+        position_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
+        ra_ = (position_info['ra'])*(math.pi/180)
+        ra = ra_[0]
+        dec_ = (position_info['dec'])*(math.pi/180)
+        dec = dec_[0]
+        #converting data to find the distance in radians to given galaxy#
+        del_dec = dec - dec1
+        del_ra = ra - ra1
+        mean_dec = (dec + dec1)/2.0
+        del_radians = math.sqrt(del_dec**2 + (del_ra*math.cos(mean_dec))**2)
+        lst_radians.append(del_radians)
+    lst_radians.sort()
+    #finding distance to nth nearest galaxy and then calculating density from that#
+    r_n_rad = lst_radians[(N-1)]
+    r_n = r_n_rad*kpc_radian
+    sig = N/(math.pi*(r_n**2))
+    return sig
 
 #creating a function for finding number of galaxies within a radius R (kpc)#
 def Counts(gal_id, gal_field, z, R):
@@ -162,52 +213,31 @@ for gal in lst_gal_1:
             if (gal_info['dec'] >= -0.091376/(math.pi/180)) and (gal_info['dec'] <= -0.090305/(math.pi/180)):
                 lst_gal.append(gal)
 
-#making lists for the plots of radius vs density, r is in KPC#
-lst_r = [20,30,50,75,100,200,300,500,750,1000]
-lst_density = []
-lst_rand = []
-lst_final = []
-lst_special = []
-for r in lst_r:
-    density_total = 0
-    density_rand_total = 0
-    for gal in lst_gal:
-        #finding number density of each galaxy at given radius and averaging them#
-        z_un = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
-        z_und = z_un['z']
-        z = z_und[0]
-        within = float(Counts(gal[0], gal[1], z, r))
-        within_rand = float(rand_counts(gal[1], z, r)+rand_counts(gal[1], z, r))/2.0
-        lst_special.append(within_rand)
-        density = within/((r**2)*math.pi)
-        density_rand = within_rand/((r**2.0)*math.pi)
-        density_total += density
-        density_rand_total += density_rand
-    density_ave = float(density_total)/len(lst_gal_massed)
-    density_rand_ave = float(density_rand_total)/len(lst_gal_massed)
-    final_ave = density_ave - density_rand_ave
-    lst_density.append(density_ave)
-    lst_rand.append(density_rand_ave)
-    lst_final.append(final_ave)
+lst_id = []
+lst_field = []
+lst_z = []
+lst_lmass = []
+lst_nth = []
 
-#calculating error of one sigma based on variation within rand_counts#
-error = np.std(lst_special)
-
-#plotting radius vs density#
-pylab.errorbar(lst_r, lst_final, yerr=error, marker = 'o', markeredgecolor='none', color='black', linestyle='-', label='Selected Galaxies After Subraction')
-pylab.plot(lst_r, lst_density, marker = 'o', markeredgecolor='none', color='b', linestyle='-', label = 'Selected Massive Galaxies')
-pylab.errorbar(lst_r, lst_rand, yerr=error, marker = 'o', markeredgecolor='none', color='r', linestyle='-', label = 'Average Background Number Density')
-
-pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
-pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.xlim([16,1050])
-pylab.ylim([0.000001,0.0002])
-pylab.yscale('log')
-pylab.xscale('log')
-pylab.legend(loc=1)
+N = 5
+                
+for gal in lst_gal:
+    gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
+    lst_id.append(gal[0])
+    lst_field.append(gal[1])
+    lst_z.append(gal_info['z_peak'][0])
+    lst_lmass.append(gal_info['lmass'][0])
+    lst_nth.append(nth_nearest(gal[0],gal[1],N))
 
 
-pylab.ion()
-pylab.show()
+data = Table([lst_id, lst_field, lst_z, lst_lmass, lst_nth], names=['id', 'field', 'z', 'lmass', 'nth'])
+ascii.write(data, 'values.dat')
+
+
+
+
+
+
+
+
 

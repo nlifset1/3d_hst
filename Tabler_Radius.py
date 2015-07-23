@@ -1,20 +1,21 @@
 print "start"
 from astropy.io import ascii
 import numpy as np
-from astropy.io import fits
-import matplotlib.pyplot as plt
-import pylab
 import math
 import random
+import astropy.constants
+from scipy import spatial
 import os
 from astropy.cosmology import WMAP9 as cosmo
+from astropy.table import Table
 os.chdir('C:\\3d_hst')
 
 #bring in the data#
 data = ascii.read("3dhst_master.phot.v4.1.cat")
 
 #flag out the bad stuff#
-data_flagged = data[(data["use_phot"] == 1.0)]
+idx, = np.where((data["use_phot"] == 1.0))
+data_flagged = data[idx]
 
 #creating a function for finding number of galaxies within a radius R (kpc)#
 def Counts(gal_id, gal_field, z, R):
@@ -27,7 +28,7 @@ def Counts(gal_id, gal_field, z, R):
                 lst_gal1.append([gal['id'], gal['field']])
     #restricting that list to galaxies above lmass of 9.415 for a 90% completeness#
     for gal in lst_gal1:
-        gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged[1] == gal['field'])]
+        gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
         if gal_info['lmass'] >= 9.415:
             lst_gal.append(gal)
 
@@ -162,52 +163,47 @@ for gal in lst_gal_1:
             if (gal_info['dec'] >= -0.091376/(math.pi/180)) and (gal_info['dec'] <= -0.090305/(math.pi/180)):
                 lst_gal.append(gal)
 
-#making lists for the plots of radius vs density, r is in KPC#
-lst_r = [20,30,50,75,100,200,300,500,750,1000]
-lst_density = []
-lst_rand = []
-lst_final = []
-lst_special = []
-for r in lst_r:
-    density_total = 0
-    density_rand_total = 0
-    for gal in lst_gal:
-        #finding number density of each galaxy at given radius and averaging them#
-        z_un = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
-        z_und = z_un['z']
-        z = z_und[0]
-        within = float(Counts(gal[0], gal[1], z, r))
-        within_rand = float(rand_counts(gal[1], z, r)+rand_counts(gal[1], z, r))/2.0
-        lst_special.append(within_rand)
-        density = within/((r**2)*math.pi)
-        density_rand = within_rand/((r**2.0)*math.pi)
-        density_total += density
-        density_rand_total += density_rand
-    density_ave = float(density_total)/len(lst_gal_massed)
-    density_rand_ave = float(density_rand_total)/len(lst_gal_massed)
-    final_ave = density_ave - density_rand_ave
-    lst_density.append(density_ave)
-    lst_rand.append(density_rand_ave)
-    lst_final.append(final_ave)
+lst_id = []
+lst_field = []
+lst_z = []
+lst_lmass = []
+lst_20 = []
+lst_30 = []
+lst_50 = []
+lst_75 = []
+lst_100 = []
+lst_200 = []
+lst_300 = []
+lst_500 = []
+lst_750 = []
+lst_1000 = []
 
-#calculating error of one sigma based on variation within rand_counts#
-error = np.std(lst_special)
+N = 5
 
-#plotting radius vs density#
-pylab.errorbar(lst_r, lst_final, yerr=error, marker = 'o', markeredgecolor='none', color='black', linestyle='-', label='Selected Galaxies After Subraction')
-pylab.plot(lst_r, lst_density, marker = 'o', markeredgecolor='none', color='b', linestyle='-', label = 'Selected Massive Galaxies')
-pylab.errorbar(lst_r, lst_rand, yerr=error, marker = 'o', markeredgecolor='none', color='r', linestyle='-', label = 'Average Background Number Density')
-
-pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
-pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
-pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
-pylab.xlim([16,1050])
-pylab.ylim([0.000001,0.0002])
-pylab.yscale('log')
-pylab.xscale('log')
-pylab.legend(loc=1)
+def Density(gal_id, gal_field, R):
+    gal_info = data_flagged[(data_flagged['id'] == gal_id) & (data_flagged['field'] == gal_field)]
+    within = Counts(gal_id, gal_field, gal_info['z_peak'], R)
+    rand_within = (1.0/3.0)*(rand_counts(gal_field, gal_info['z_peak'], R) + rand_counts(gal_field, gal_info['z_peak'], R) + rand_counts(gal_field, gal_info['z_peak'], R))
+    dens = (within - rand_within)/((R**2)*math.pi)
+    return dens
+                
+for gal in lst_gal:
+    gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
+    lst_id.append(gal[0])
+    lst_field.append(gal[1])
+    lst_z.append(gal_info['z_peak'][0])
+    lst_lmass.append(gal_info['lmass'][0])
+    lst_20.append(Density(gal[0],gal[1],20))
+    lst_30.append(Density(gal[0],gal[1],30))
+    lst_50.append(Density(gal[0],gal[1],50))
+    lst_75.append(Density(gal[0],gal[1],75))
+    lst_100.append(Density(gal[0],gal[1],100))
+    lst_200.append(Density(gal[0],gal[1],200))
+    lst_300.append(Density(gal[0],gal[1],300))
+    lst_500.append(Density(gal[0],gal[1],500))
+    lst_750.append(Density(gal[0],gal[1],750))
+    lst_1000.append(Density(gal[0],gal[1],1000))
 
 
-pylab.ion()
-pylab.show()
-
+data = Table([lst_id, lst_field, lst_z, lst_lmass, lst_20, lst_30, lst_50, lst_75, lst_100, lst_200, lst_300, lst_500, lst_750, lst_1000], names=['id', 'field', 'z', 'lmass', 'r20', 'r30', 'r50', 'r75', 'r100', 'r200', 'r300', 'r500', 'r750', 'r1000'])
+ascii.write(data, 'values_R.dat')

@@ -16,18 +16,15 @@ os.chdir('C:\\3d_hst')
 def median(lst):
     return np.median(np.array(lst))
 
-#making a function for finding the geometric standard deviation#
-def geo_sigma(lst):
-    mew = stats.gmean(lst)
-    sigma = math.exp(math.sqrt(sum(np.log(lst/mew)**2)/len(lst)))
-    return sigma
+def mad(lst):
+    return median(np.absolute(median(lst)-lst))
 
 #bring in the data#
 data = ascii.read("3dhst_master.phot.v4.1.cat")
+stuff = ascii.read('values.dat')
 
 #flag out the bad stuff#
-idx, = np.where((data["use_phot"] == 1.0))
-data_flagged = data[idx]
+data_flagged = data[(data["use_phot"] == 1.0)]
 
 #create a function for finding local galaxy density (projected surface density)#
 def nth_nearest(gal_id, gal_field, N):
@@ -40,7 +37,7 @@ def nth_nearest(gal_id, gal_field, N):
     #create a list of ids of galaxies in z range and with lmass above 9.415#
     lst_id =[]
     for gal in z_bin:
-        if (gal['id'] != gal_id) or (gal['field'] != gal_field):
+        if (gal['id'] != gal_id) and (gal['field'] == gal_field):
             if gal['lmass'] >= 9.415:
                 lst_id.append([gal['id'], gal['field']])
 
@@ -86,17 +83,30 @@ for gal in data_flagged:
         if ((gal['z_peak'] >= 0.5) and (gal['z_peak'] <= 2.5)):
             lst_gal_1.append([gal['id'], gal['field']])
 
-#getting list of galaxies from previous list that also avoid edges by 0.05 degrees#
-lst_gal =[]
-upper_RA = 215.25
-lower_RA = 34.27
-upper_DEC = 62.33
-lower_DEC = -28.0
+#EDGING#
+lst_gal = []
 for gal in lst_gal_1:
     gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
-    if ((gal_info['ra'] < upper_RA) and (gal_info['ra'] > lower_RA)):
-        if ((gal_info['dec'] < upper_DEC) and (gal_info['dec'] > lower_DEC)):
-            lst_gal.append(gal)
+    if gal[1] == 'AEGIS':
+        if (gal_info['ra'] >= 3.746/(math.pi/180)) and (gal_info['ra'] <= 3.756821/(math.pi/180)):
+            if (gal_info['dec'] >= 0.920312/(math.pi/180)) and (gal_info['dec'] <= 0.925897/(math.pi/180)):
+                lst_gal.append(gal)
+    elif gal[1] == 'COSMOS':
+        if (gal_info['ra'] >= 2.619737/(math.pi/180)) and (gal_info['ra'] <= 2.620718/(math.pi/180)):
+            if (gal_info['dec'] >= 0.038741/(math.pi/180)) and (gal_info['dec'] <= 0.043811/(math.pi/180)):
+                lst_gal.append(gal)
+    elif gal[1] == 'GOODS-N':
+        if (gal_info['ra'] >= 3.298072/(math.pi/180)) and (gal_info['ra'] <= 3.307597/(math.pi/180)):
+            if (gal_info['dec'] >= 1.084787/(math.pi/180)) and (gal_info['dec'] <= 1.087936/(math.pi/180)):
+                lst_gal.append(gal)
+    elif gal[1] == 'GOODS-S':
+        if (gal_info['ra'] >= 0.925775/(math.pi/180)) and (gal_info['ra'] <= 0.929397/(math.pi/180)):
+            if (gal_info['dec'] >= -0.487098/(math.pi/180)) and (gal_info['dec'] <= -0.483591/(math.pi/180)):
+                lst_gal.append(gal)
+    elif gal[1] == 'UDS':
+        if (gal_info['ra'] >= 0.59815/(math.pi/180)) and (gal_info['ra'] <= 0.602889/(math.pi/180)):
+            if (gal_info['dec'] >= -0.091376/(math.pi/180)) and (gal_info['dec'] <= -0.090305/(math.pi/180)):
+                lst_gal.append(gal)
 
 
 #splitting the massed list into four redshift bins#
@@ -128,11 +138,12 @@ lst_mass1 = []
 lst_nth1 = []
 
 for gal in lst_gal1:
-    for item in data_flagged:
+    for item in stuff:
         if (item['id'] == gal[0]) & (item['field'] == gal[1]):
             lst_mass1.append(item['lmass'])
-            lst_nth1.append(nth_nearest(gal[0], gal[1], N))
+            lst_nth1.append(item['nth'])
             break
+
 
 #MEDIAN POINTS#
 #initializing lists for each of the 10 lmass bins#
@@ -195,13 +206,13 @@ mass_median1_7 = median(mass_total1_7)
 mass_median1_8 = median(mass_total1_8)
 
 #calculating standard deviation for the median points#
-sigma1_2 = geo_sigma(density_total1_2)
-sigma1_3 = geo_sigma(density_total1_3)
-sigma1_4 = geo_sigma(density_total1_4)
-sigma1_5 = geo_sigma(density_total1_5)
-sigma1_6 = geo_sigma(density_total1_6)
-sigma1_7 = geo_sigma(density_total1_7)
-sigma1_8 = geo_sigma(density_total1_8)
+sigma1_2 = mad(density_total1_2)
+sigma1_3 = mad(density_total1_3)
+sigma1_4 = mad(density_total1_4)
+sigma1_5 = mad(density_total1_5)
+sigma1_6 = mad(density_total1_6)
+sigma1_7 = mad(density_total1_7)
+sigma1_8 = mad(density_total1_8)
 
 
 #putting all the medians into a list#
@@ -215,10 +226,10 @@ lst_mass2 = []
 lst_nth2 = []
 
 for gal in lst_gal2:
-    for item in data_flagged:
+    for item in stuff:
         if (item['id'] == gal[0]) & (item['field'] == gal[1]):
             lst_mass2.append(item['lmass'])
-            lst_nth2.append(nth_nearest(gal[0], gal[1], N))
+            lst_nth2.append(item['nth'])
             break
 
 #MEDIAN POINTS#
@@ -283,13 +294,13 @@ mass_median2_7 = median(mass_total2_7)
 mass_median2_8 = median(mass_total2_8)
 
 #calculating standard deviation for the median points#
-sigma2_2 = geo_sigma(density_total2_2)
-sigma2_3 = geo_sigma(density_total2_3)
-sigma2_4 = geo_sigma(density_total2_4)
-sigma2_5 = geo_sigma(density_total2_5)
-sigma2_6 = geo_sigma(density_total2_6)
-sigma2_7 = geo_sigma(density_total2_7)
-sigma2_8 = geo_sigma(density_total2_8)
+sigma2_2 = mad(density_total2_2)
+sigma2_3 = mad(density_total2_3)
+sigma2_4 = mad(density_total2_4)
+sigma2_5 = mad(density_total2_5)
+sigma2_6 = mad(density_total2_6)
+sigma2_7 = mad(density_total2_7)
+sigma2_8 = mad(density_total2_8)
 
 #putting all the medians into a list#
 lst_density_median2 = [density_median2_2, density_median2_3, density_median2_4, density_median2_5, density_median2_6, density_median2_7, density_median2_8]
@@ -303,10 +314,10 @@ lst_mass3 = []
 lst_nth3 = []
 
 for gal in lst_gal3:
-    for item in data_flagged:
+    for item in stuff:
         if (item['id'] == gal[0]) & (item['field'] == gal[1]):
             lst_mass3.append(item['lmass'])
-            lst_nth3.append(nth_nearest(gal[0], gal[1], N))
+            lst_nth3.append(item['nth'])
             break
 
 #MEDIAN POINTS#
@@ -368,12 +379,12 @@ lst_mass_median3 = [mass_median3_3, mass_median3_4, mass_median3_5, mass_median3
 
 
 #calculating standard deviation for the median points#
-sigma3_3 = geo_sigma(density_total3_3)
-sigma3_4 = geo_sigma(density_total3_4)
-sigma3_5 = geo_sigma(density_total3_5)
-sigma3_6 = geo_sigma(density_total3_6)
-sigma3_7 = geo_sigma(density_total3_7)
-sigma3_8 = geo_sigma(density_total3_8)
+sigma3_3 = mad(density_total3_3)
+sigma3_4 = mad(density_total3_4)
+sigma3_5 = mad(density_total3_5)
+sigma3_6 = mad(density_total3_6)
+sigma3_7 = mad(density_total3_7)
+sigma3_8 = mad(density_total3_8)
 
 lst_sigma3 = [sigma3_3, sigma3_4, sigma3_5, sigma3_6, sigma3_7, sigma3_8]
 
@@ -383,10 +394,10 @@ lst_mass4 = []
 lst_nth4 = []
 
 for gal in lst_gal4:
-    for item in data_flagged:
+    for item in stuff:
         if (item['id'] == gal[0]) & (item['field'] == gal[1]):
             lst_mass4.append(item['lmass'])
-            lst_nth4.append(nth_nearest(gal[0], gal[1], N))
+            lst_nth4.append(item['nth'])
             break
 
 #MEDIAN POINTS#
@@ -461,14 +472,14 @@ lst_density_median4 = [density_median4_1, density_median4_2, density_median4_3, 
 lst_mass_median4 = [mass_median4_1, mass_median4_2, mass_median4_3, mass_median4_4, mass_median4_5, mass_median4_6, mass_median4_7, mass_median4_8]
 
 #calculating standard deviation for the median points#
-sigma4_1 = geo_sigma(density_total4_1)
-sigma4_2 = geo_sigma(density_total4_2)
-sigma4_3 = geo_sigma(density_total4_3)
-sigma4_4 = geo_sigma(density_total4_4)
-sigma4_5 = geo_sigma(density_total4_5)
-sigma4_6 = geo_sigma(density_total4_6)
-sigma4_7 = geo_sigma(density_total4_7)
-sigma4_8 = geo_sigma(density_total4_8)
+sigma4_1 = mad(density_total4_1)
+sigma4_2 = mad(density_total4_2)
+sigma4_3 = mad(density_total4_3)
+sigma4_4 = mad(density_total4_4)
+sigma4_5 = mad(density_total4_5)
+sigma4_6 = mad(density_total4_6)
+sigma4_7 = mad(density_total4_7)
+sigma4_8 = mad(density_total4_8)
 
 lst_sigma4 = [sigma4_1, sigma4_2, sigma4_3, sigma4_4, sigma4_5, sigma4_6, sigma4_7, sigma4_8]
 
@@ -476,42 +487,52 @@ lst_sigma4 = [sigma4_1, sigma4_2, sigma4_3, sigma4_4, sigma4_5, sigma4_6, sigma4
 #PLOTTING#
 #make a 2x2 plot of basic lmass vs density#
 
-gs=GridSpec(2,2, hspace=0, wspace=0)
+fig,pylab.axes = pylab.subplots(2, 2, sharex = True, sharey = True)
 
-a1 = plt.subplot(gs[0,0])
-a2 = plt.subplot(gs[0,1])
-a3 = plt.subplot(gs[1,0])
-a4 = plt.subplot(gs[1,1])
+a1 = pylab.axes[0,0]
+a2 = pylab.axes[0,1]
+a3 = pylab.axes[1,0]
+a4 = pylab.axes[1,1]
 
 a1.plot(lst_mass1, lst_nth1, alpha=0.5, marker='o', markeredgecolor='none', linestyle='none', color='b', label='2.0 < z < 2.5')
-a1.errorbar(lst_mass_median1, lst_density_median1, yerr=lst_sigma1, markersize=15, color='r', ecolor='r')
+a1.errorbar(lst_mass_median1, lst_density_median1, yerr=lst_sigma1, markersize=15, color='black', ecolor='black')
 a1.legend(loc=1)
 
 a2.plot(lst_mass2, lst_nth2, alpha=0.5, marker='o', markeredgecolor='none', linestyle='none', color='b', label='1.5 < z < 2.0')
-a2.errorbar(lst_mass_median2, lst_density_median2, yerr=lst_sigma2, markersize=15, color='r', ecolor='r')
+a2.errorbar(lst_mass_median2, lst_density_median2, yerr=lst_sigma2, markersize=15, color='black', ecolor='black')
 a2.legend(loc=1)
 
 a3.plot(lst_mass3, lst_nth3, alpha=0.5, marker='o', markeredgecolor='none', linestyle='none', color='b', label='1.0 < z < 1.5')
-a3.errorbar(lst_mass_median3, lst_density_median3, yerr=lst_sigma3, markersize=15, color='r', ecolor='r')
+a3.errorbar(lst_mass_median3, lst_density_median3, yerr=lst_sigma3, markersize=15, color='black', ecolor='black')
 a3.legend(loc=1)
 
 a4.plot(lst_mass4, lst_nth4, alpha=0.5, marker='o', markeredgecolor='none', linestyle='none', color='b', label='0.5 < z < 1.0')
-a4.errorbar(lst_mass_median4, lst_density_median4, yerr=lst_sigma4, markersize=15, color='r', ecolor='r')
+a4.errorbar(lst_mass_median4, lst_density_median4, yerr=lst_sigma4, markersize=15, color='black', ecolor='black')
 a4.legend(loc=4)
 
 pylab.suptitle("Log Mass vs Galaxy Number Density in Four Redshift Bins", fontsize=17)
 fig.text(0.44, 0.01, "Log Mass", fontsize=18)
 fig.text(0.01, 0.9, "Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", rotation = "vertical", fontsize=18)
 
-pylab.xlim([10.96,11.79])
-pylab.ylim([0.0000005,0.0008])
-pylab.yscale('log')
-fig.subplots_adjust(hspace=0, wspace=0)
+pylab.xlim([10.96,11.8])
+pylab.ylim([0.0000005,0.001])
 
-a1.xaxis.set_visible(False)
-a2.xaxis.set_visible(False)
-a2.yaxis.set_visible(False)
-a4.yaxis.set_visible(False)
+a1.set_yscale('log')
+a2.set_yscale('log')
+a3.set_yscale('log')
+a4.set_yscale('log')
+
+fig.subplots_adjust(hspace=0.1, wspace=0.1)
+
+ticks = [11.0,11.1,11.2,11.3,11.4,11.5,11.6,11.7,11.8]
+labels = [11.0,'',11.2,'',11.4,'',11.6,'          11.8']
+pylab.xticks(ticks, labels)
+
+
+a1.xaxis.set_visible(True)
+a2.xaxis.set_visible(True)
+a2.yaxis.set_visible(True)
+a4.yaxis.set_visible(True)
 
 
 
