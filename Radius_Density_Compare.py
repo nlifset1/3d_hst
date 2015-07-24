@@ -168,6 +168,7 @@ lst_density = []
 lst_rand = []
 lst_final = []
 lst_special = []
+lst_error = []
 for r in lst_r:
     density_total = 0
     density_rand_total = 0
@@ -189,14 +190,12 @@ for r in lst_r:
     lst_density.append(density_ave)
     lst_rand.append(density_rand_ave)
     lst_final.append(final_ave)
-
-#calculating error of one sigma based on variation within rand_counts#
-error = np.std(lst_special)
+    lst_error.append(np.std(lst_special)
 
 #plotting radius vs density#
-pylab.errorbar(lst_r, lst_final, yerr=error, marker = 'o', markeredgecolor='none', color='black', linestyle='-', label='Selected Galaxies After Subraction')
+pylab.errorbar(lst_r, lst_final, yerr=lst_error, marker = 'o', markeredgecolor='none', color='black', linestyle='-', label='Selected Galaxies After Subraction')
 pylab.plot(lst_r, lst_density, marker = 'o', markeredgecolor='none', color='b', linestyle='-', label = 'Selected Massive Galaxies')
-pylab.errorbar(lst_r, lst_rand, yerr=error, marker = 'o', markeredgecolor='none', color='r', linestyle='-', label = 'Average Background Number Density')
+pylab.errorbar(lst_r, lst_rand, yerr=lst_error, marker = 'o', markeredgecolor='none', color='r', linestyle='-', label = 'Average Background Number Density')
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius at All Redshifts', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)

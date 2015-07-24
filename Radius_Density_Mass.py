@@ -13,47 +13,21 @@ os.chdir('C:\\3d_hst')
 #bring in the data#
 data = ascii.read("3dhst_master.phot.v4.1.cat")
 stuff = ascii.read('values_r.dat')
-errors = ascii.read('errors.dat')
-lst_errors = []
+
+#getting the lists for errors of each bin#
+errors = ascii.read('lmass_errors.dat')
+lst_errors1 = []
+lst_errors2 = []
+lst_errors3 = []
+lst_errors4 = []
 for error in errors:
-    lst_errors.append(error)
+    lst_errors1.append(error[0][0])
+    lst_errors2.append(error[1][0])
+    lst_errors3.append(error[2][0])
+    lst_errors4.append(error[3][0])
 
 #flag out the bad stuff#
-data_flagged = data[(data["use_phot"] == 1.0)]
-
-
-#getting a list of galaxies with lmass >= 11.0 and within the redshift range of 0.5<z<2.5#
-lst_gal_1 = []
-for gal in data_flagged:
-    if (gal['lmass'] >= 11.0):
-        if ((gal['z_peak'] >= 0.5) and (gal['z_peak'] <= 2.5)):
-            lst_gal_1.append([gal['id'], gal['field']])
-
-#EDGING#
-lst_gal = []
-for gal in lst_gal_1:
-    gal_info = data_flagged[(data_flagged['id'] == gal[0]) & (data_flagged['field'] == gal[1])]
-    if gal[1] == 'AEGIS':
-        if (gal_info['ra'] >= 3.746/(math.pi/180)) and (gal_info['ra'] <= 3.756821/(math.pi/180)):
-            if (gal_info['dec'] >= 0.920312/(math.pi/180)) and (gal_info['dec'] <= 0.925897/(math.pi/180)):
-                lst_gal.append(gal)
-    elif gal[1] == 'COSMOS':
-        if (gal_info['ra'] >= 2.619737/(math.pi/180)) and (gal_info['ra'] <= 2.620718/(math.pi/180)):
-            if (gal_info['dec'] >= 0.038741/(math.pi/180)) and (gal_info['dec'] <= 0.043811/(math.pi/180)):
-                lst_gal.append(gal)
-    elif gal[1] == 'GOODS-N':
-        if (gal_info['ra'] >= 3.298072/(math.pi/180)) and (gal_info['ra'] <= 3.307597/(math.pi/180)):
-            if (gal_info['dec'] >= 1.084787/(math.pi/180)) and (gal_info['dec'] <= 1.087936/(math.pi/180)):
-                lst_gal.append(gal)
-    elif gal[1] == 'GOODS-S':
-        if (gal_info['ra'] >= 0.925775/(math.pi/180)) and (gal_info['ra'] <= 0.929397/(math.pi/180)):
-            if (gal_info['dec'] >= -0.487098/(math.pi/180)) and (gal_info['dec'] <= -0.483591/(math.pi/180)):
-                lst_gal.append(gal)
-    elif gal[1] == 'UDS':
-        if (gal_info['ra'] >= 0.59815/(math.pi/180)) and (gal_info['ra'] <= 0.602889/(math.pi/180)):
-            if (gal_info['dec'] >= -0.091376/(math.pi/180)) and (gal_info['dec'] <= -0.090305/(math.pi/180)):
-                lst_gal.append(gal)
-    
+data_flagged = data[(data["use_phot"] == 1.0)]    
 
 
 #splitting the massed list into four lmass bins#
@@ -65,16 +39,15 @@ lst_gal1 = []
 lst_gal2 = []
 lst_gal3 = []
 lst_gal4 = []
-for gal in lst_gal:
-    gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-    if gal_info['lmass'] <= 11.15:
-        lst_gal1.append(gal)
-    elif gal_info['lmass'] <= 11.3:
-        lst_gal2.append(gal)
-    elif gal_info['lmass'] <= 11.45:
-        lst_gal3.append(gal)
-    elif gal_info['lmass'] <= 11.6:
-        lst_gal4.append(gal)
+for gal in stuff:
+    if gal['lmass'] <= 11.15:
+        lst_gal1.append([gal['id'],gal['field']])
+    elif gal['lmass'] <= 11.3:
+        lst_gal2.append([gal['id'],gal['field']])
+    elif gal['lmass'] <= 11.45:
+        lst_gal3.append([gal['id'],gal['field']])
+    elif gal['lmass'] <= 11.6:
+        lst_gal4.append([gal['id'],gal['field']])
 
 #making lists for the plots of radius vs density, r is in KPC#
 lst_r = [20,30,50,75,100,200,300,500,750,1000]
@@ -84,7 +57,6 @@ lst_density3 = []
 lst_density4 = []
 for r in lst_r:
     radius_label = 'r%s' % (r)
-
     density_total1 = 0
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
@@ -124,10 +96,10 @@ for r in lst_r:
 
 #plotting radius vs density#
 
-pylab.plot(lst_r, lst_density1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '11.0 < LMass < 11.15')
-pylab.plot(lst_r, lst_density2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '11.15 < LMass < 11.3')
-pylab.plot(lst_r, lst_density3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '11.3 < LMass < 11.45')
-pylab.plot(lst_r, lst_density4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '11.45 < LMass < 11.6')
+pylab.errorbar(lst_r, lst_density1, yerr=lst_errors1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '11.0 < LMass < 11.15')
+pylab.errorbar(lst_r, lst_density2, yerr=lst_errors2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '11.15 < LMass < 11.3')
+pylab.errorbar(lst_r, lst_density3, yerr=lst_errors3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '11.3 < LMass < 11.45')
+pylab.errorbar(lst_r, lst_density4, yerr=lst_errors4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '11.45 < LMass < 11.6')
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Mass Bins', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
