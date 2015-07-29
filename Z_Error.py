@@ -106,25 +106,25 @@ for R in lst_radius:
     lst_rand1 = []
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand.append(rand_counts(gal[1], gal_info['z'], R))
+        lst_rand1.append(rand_counts(gal[1], gal_info['z'], R))
     lst_errors1.append(np.std(lst_rand1))
 
     lst_rand2 = []
     for gal in lst_gal2:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand.append(rand_counts(gal[1], gal_info['z'], R))
+        lst_rand2.append(rand_counts(gal[1], gal_info['z'], R))
     lst_errors2.append(np.std(lst_rand2))
 
     lst_rand3 = []
     for gal in lst_gal3:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand.append(rand_counts(gal[1], gal_info['z'], R))
+        lst_rand3.append(rand_counts(gal[1], gal_info['z'], R))
     lst_errors3.append(np.std(lst_rand3))
 
     lst_rand4 = []
     for gal in lst_gal4:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand.append(rand_counts(gal[1], gal_info['z'], R))
+        lst_rand4.append(rand_counts(gal[1], gal_info['z'], R))
     lst_errors4.append(np.std(lst_rand4))
 
 data = Table([lst_errors1,lst_errors2,lst_errors3,lst_errors4], names=['std1','std2','std3','std4'])

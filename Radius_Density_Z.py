@@ -50,16 +50,24 @@ for gal in stuff:
 
 #making lists for the plots of radius vs density, r is in KPC#
 lst_r = [20,30,50,75,100,200,300,500,750,1000]
+
 lst_density1 = []
 lst_density2 = []
 lst_density3 = []
 lst_density4 = []
+
+lst_dens1 = []
+lst_dens2 = []
+lst_dens3 = []
+lst_dens4 = []
+
 for r in lst_r:
     radius_label = 'r%s' % (r)
     density_total1 = 0
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
+        lst_dens1.append(density)
         density_total1 += density
     #averaging density of each galaxy at each radius#
     density_ave1 = float(density_total1)/len(lst_gal1)
@@ -69,15 +77,17 @@ for r in lst_r:
     for gal in lst_gal2:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
+        lst_dens2.append(density)
         density_total2 += density
     #averaging density of each galaxy at each radius#
     density_ave2 = float(density_total2)/len(lst_gal2)
     lst_density2.append(density_ave2)
 
     density_total3 = 0
-    for gal in lst_gal_massed3:
+    for gal in lst_gal:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
+        lst_dens3.append(density)
         density_total3 += density
     #averaging density of each galaxy at each radius#
     density_ave3 = float(density_total3)/len(lst_gal3)
@@ -87,18 +97,40 @@ for r in lst_r:
     for gal in lst_gal4:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
+        lst_dens4.append(density)
         density_total4 += density
     #averaging density of each galaxy at each radius#
     density_ave4 = float(density_total4)/len(lst_gal4)
     lst_density4.append(density_ave4)
 
-
+lst_r1 = []
+lst_r2 = []
+lst_r3 = []
+lst_r4 = []
+for radius in lst_r:
+    for gal in lst_gal1:
+        lst_r1.append(radius)
+for radius in lst_r:
+    for gal in lst_gal2:
+        lst_r2.append(radius)
+for radius in lst_r:
+    for gal in lst_gal3:
+        lst_r3.append(radius)
+for radius in lst_r:
+    for gal in lst_gal4:
+        lst_r4.append(radius)
+        
 #plotting radius vs density#
 
 pylab.errorbar(lst_r, lst_density1, yerr=lst_errors1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '2.0 < z < 2.5')
 pylab.errorbar(lst_r, lst_density2, yerr=lst_errors2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '1.5 < z < 2.0')
 pylab.errorbar(lst_r, lst_density3, yerr=lst_errors3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '1.0 < z < 1.5')
 pylab.errorbar(lst_r, lst_density4, yerr=lst_errors4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '0.5 < z < 1.0')
+
+pylab.scatter(lst_r1, lst_dens1, color='r', alpha=0.3)
+pylab.scatter(lst_r2, lst_dens2, color='b', alpha=0.3)
+pylab.scatter(lst_r3, lst_dens3, color='g', alpha=0.3)
+pylab.scatter(lst_r4, lst_dens4, color='y', alpha=0.3)
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Redshift Bins', fontsize=17)
 pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
