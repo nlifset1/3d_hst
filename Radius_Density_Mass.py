@@ -10,6 +10,13 @@ import os
 from astropy.cosmology import WMAP9 as cosmo
 os.chdir('C:\\3d_hst')
 
+#making a median function easier#
+def median(lst):
+    return np.median(np.array(lst))
+
+def mad(lst):
+    return median(np.absolute(median(lst)-lst))
+
 #bring in the data#
 print 'getting data'
 data = ascii.read("3dhst_master.phot.v4.1.cat")
@@ -60,49 +67,68 @@ lst_density2 = []
 lst_density3 = []
 lst_density4 = []
 
+lst_sigma1 = []
+lst_sigma2 = []
+lst_sigma3 = []
+lst_sigma4 = []
+
 for i in range(len(lst_r)):
+    
     radius_label = 'radius%s' % (i+1)
     rand_label = 'rand%s' % (i+1)
     print radius_label
+    
     density_total1 = 0
+    lst_dens1 = []
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
         density_rand = gal_info[rand_label]
         density_total1 += (density - density_rand)
+        lst_dens1.append(density - density_rand)
     #averaging density of each galaxy at each radius#
     density_ave1 = float(density_total1)/len(lst_gal1)
     lst_density1.append(density_ave1)
+    lst_sigma1.append(mad(lst_dens1))
 
     density_total2 = 0
+    lst_dens2 = []
     for gal in lst_gal2:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
         density_rand = gal_info[rand_label]
         density_total2 += (density - density_rand)
+        lst_dens2.append(density - density_rand)
     #averaging density of each galaxy at each radius#
     density_ave2 = float(density_total2)/len(lst_gal2)
     lst_density2.append(density_ave2)
+    lst_sigma2.append(mad(lst_dens2))
 
     density_total3 = 0
+    lst_dens3 = []
     for gal in lst_gal3:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
         density_rand = gal_info[rand_label]
         density_total3 += (density - density_rand)
+        lst_dens3.append(density - density_rand)
     #averaging density of each galaxy at each radius#
     density_ave3 = float(density_total3)/len(lst_gal3)
     lst_density3.append(density_ave3)
+    lst_sigma3.append(mad(lst_dens3))
 
     density_total4 = 0
+    lst_dens4 = []
     for gal in lst_gal4:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         density = gal_info[radius_label]
         density_rand = gal_info[rand_label]
         density_total4 += (density - density_rand)
+        lst_dens4.append(density - density_rand)
     #averaging density of each galaxy at each radius#
     density_ave4 = float(density_total4)/len(lst_gal4)
     lst_density4.append(density_ave4)
+    lst_sigma4.append(mad(lst_dens4))
 
 
 
@@ -118,7 +144,7 @@ pylab.xlabel('Aperture Radius (kpc)', fontsize=16)
 pylab.ylabel('Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)', fontsize=15)
 pylab.legend(loc=1)
 pylab.xlim([10,5000])
-pylab.ylim([0.0000005,0.002])
+pylab.ylim([0.0000001,0.002])
 pylab.yscale('log')
 pylab.xscale('log')
 

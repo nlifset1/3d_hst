@@ -43,28 +43,24 @@ for gal in stuff:
 
 for i in range(len(lst_radius)):
     print '%s' % (i)
-    print 'rand1'
     lst_rand1 = []
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         lst_rand1.append(gal_info['rand{}'.format(i+1)])
     lst_errors1.append(np.std(lst_rand1))
 
-    print 'rand2'
     lst_rand2 = []
     for gal in lst_gal2:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         lst_rand2.append(gal_info['rand{}'.format(i+1)])
     lst_errors2.append(np.std(lst_rand2))
 
-    print 'rand3'
     lst_rand3 = []
     for gal in lst_gal3:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
         lst_rand3.append(gal_info['rand{}'.format(i+1)])
     lst_errors3.append(np.std(lst_rand3))
 
-    print 'rand4'
     lst_rand4 = []
     for gal in lst_gal4:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]

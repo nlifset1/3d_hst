@@ -117,7 +117,13 @@ def Density_rand(gal_id, gal_field):
     gal_info = gal_info = data_flagged[(data_flagged['id'] == gal_id) & (data_flagged['field'] == gal_field)]
     lst_r = 10**np.linspace(1.2,3.6,13)
     lst_dens = []
-    lst = rand_counts(gal_field, gal_info['z_peak'])
+    lst1 = rand_counts(gal_field, gal_info['z_peak'])
+    lst2 = rand_counts(gal_field, gal_info['z_peak'])
+    lst3 = rand_counts(gal_field, gal_info['z_peak'])
+    lst4 = rand_counts(gal_field, gal_info['z_peak'])
+    lst = []
+    for i in range(len(lst1)):
+        lst.append((lst1[i]+lst2[i]+lst3[i]+lst4[i])/4.0)
     for i in range(len(lst_r)):
         lst_dens.append(lst[i]/((lst_r[i]**2)*math.pi))
     return lst_dens
