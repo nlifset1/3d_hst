@@ -17,37 +17,62 @@
 
 \begin{abstract}
 
-We study the local galaxynumber density environments of very massive galaxies. We select galaxies with mass greater than 10 \textsuperscript{11} solar masses and with a redshift between 0.5 and 2.5. Using both the Nth nearest and aperture radius calculations for local galaxy number density, we are able to study both the immediate environment and general environment. \citet{TOMER}
+We study the local galaxy number density environments of very massive galaxies in the 3d-hst survey. We select galaxies with mass greater than 10 \textsuperscript{11} solar masses and with a redshift between 0.5 and 2.5. Using both the nth nearest and counts in aperture radius calculations for local galaxy number density, we are able to study both the immediate environment and general environment. sorting the galaxies into  redshift and mass bins, we study the relationship between local galaxy number density, redshift, and mass. We find an increased number density in the local environment for the most massive galaxies of our sample. We also find that there is an inverse correlation with galaxy number density and redshift. This paper is largely an extension of Tal (2013)
 \end{abstract}
-\keywords{Galaxy Number Density}
+\keywords{}
 
 \section{Introduction}
 
-lots and lots and lots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots and lots andlots of text.
+The properties of galaxies are largely affected by their local environments and vice-versa. Local galaxy number density has been shown to correlate with a number of important properties, such as morphology, mass, star formation rate, and stellar colors (link to articles that Tomer links to in his nitroduction?). Less is known about local galaxy number density and redshift, especially at Z>1. Tomer Tal has studied this relationship up to a redshift of 1.6 Tal (2013). Using a counts per aperture radius method with background subtraction, he found that redshift stayed largely constant, as well as mass.
+
+Here, we use a similar method for galaxy number density, as well as the nth nearest method, to extend Tal's work to higher redshifts using the 3d-hst survey.
+
+For this paper we adopt the following cosmological parameters: $\Omega_{m}$ = 0.3, $\Omega_{\Lambda}$ = 0.7, and \textit{H}$_{0}$ = 69.31 km (s Mpc)$^{-1}$.
 
 \section{Sample Selection}
 
-We use 3d hst. We cut off lmass at 9,415 and above because of the completeness from Tal (2014). Talk about edging, even though it only applies to the nth nearest neighbor calculation. 
+We use data from the galaxy survey 3d hst, which includes the fields Aegis, Cosmos, Goods-n, Goods-s, and uds. For our sample of massive galaxies to study, we made a few specifications. Galaxies are selected with a mass greater than 10 \textsuperscript{11} solar masses, although none exceed 10 \textsuperscript{11.8}. We also limit ourselves to galaxies within a redshift range of 0.5 to 2.5. In order to avoid errors in the calculation from selecting galaxies at the edge, and thus getting a less than expected number density, we do not select galaxies within 0.05 degrees of the edges of any field used.
+We must also limit the selection of general galaxies used to calculate local number density. We only use galaxies within the same redshift range and with mass greater than 10 \textsuperscript{9,415} solar masses. The lower mass limit was taken from Tal (2014), and is used to keep completeness above 95\% at all redshifts.
 
 \section{Data and Analysis}
 
-We use two different methods for calculating local galaxy number density. The first, the nth nearest neighbor calculation, has been shown to be more accurate for immediate environments Cooper (2014). The second, counts in aperture radius, is more accurate for larger and more general environments Cooper (2014).
+We use two different methods for calculating local galaxy number density. The first, the nth nearest neighbor calculation, has been shown to be more accurate for immediate environments Cooper (2014). The second, counts in selected aperture radius, is more accurate for larger and more general environments Cooper (2014).
 
 \subsection{Nth Nearest Calculation}
 
-One of the most common ways of measuring local galaxy number density is using the distance to the nth nearest spectroscopically observed galaxy. Redshift information is used to restrict the pool of neighbors that can be selected from to a given velocity interval. This is done to avoid background and foreground sources. A redshift difference of 0.08 is used here to try and maintain completeness as best as possible. This cut off was selected based on suggestions by Cooper (2014), Tal (2012), and Muldrew (2012). Thus the pool of galaxies that the nth nearest neighbor is being selected from is a cylinder, rather than a sphere. The nth nearest neighbor distance is expressed as a projected surface density $\Sigma$ $_{n}$. The calculation for the projected surface density is $\Sigma$$_{n}$ = n / ($\pi$ R$_{n}$$^{2}$) where R$_{n}$ is the distance to the nth nearest neighbor. 
+One of the most common ways of measuring local galaxy number density is using the distance to the nth nearest spectroscopically observed galaxy. Redshift information is used to restrict the pool of neighbors that can be selected from to a given velocity interval. This is done to avoid background and foreground sources. A redshift difference of 0.08 is used here to try and maintain completeness as best as possible. This cut off was selected based on suggestions by Cooper (2014), Tal (2012), and Muldrew (2012). Thus the pool of galaxies that the nth nearest neighbor is being selected from is a cylinder, rather than a sphere. The nth nearest neighbor distance is expressed as a projected surface density $\Sigma$ $_{n}$. The calculation for the projected surface density is
+
+ $$\Sigma_{n} = n / (\pi  R_{n}^{2})$$
+
+ where R$_{n}$ is the distance to the nth nearest neighbor. 
 
 
 
 \subsection{Counts in Aperture Radius Calculation}
 
-Another method for measuring local galaxy number density is counting the number of galaxies within a certain aperture radius. This method once again requires a redshift cut of 0.08. The pool of galaxies counted is then also a cylinder rather than a sphere. The calculation for galaxy number density is simply $\Sigma$$_{r}$ = n$_{gal}$ / ($\pi$ r$^{2}$) where r is the selected aperture radius and n$_{gal}$ is the number of galaxies within that radius.
+Another method for measuring local galaxy number density is counting the number of galaxies within a certain aperture radius. This method once again requires a redshift cut of 0.08. This was selected based on the relative photometric uncertainty between selected massive galaxies and general galaxies near them. The pool of galaxies counted is then also a cylinder rather than a sphere. The calculation for galaxy number density is simply
+ $$\Sigma_{r} = n_{gal} / (\pi r^{2})$$
+ where r is the selected aperture radius and n$_{gal}$ is the number of galaxies within that radius. Selecting many different aperture radii allows us to analyze the galaxy number density in both local and general environments. 
 
-INCLUDE APERTURE RADIUS COMPARE GRAPHIC
+In order to calculate the galaxy number density that is solely a result of the selected massive galaxies, an average background number density is subtracted after each normal $\Sigma_{r}$ calculation. In order to do this, for each selected massive galaxy, four different calculations are carried out for galaxy number density using the selected galaxy's field and redshift, but random coordinateswithin said field. These four calculations are then averaged and we have our averaged background number density. Subtracting this from our normal $\Sigma_{r}$ calculation yields a fairly accurate representation of galaxy number density that is a direct result of the massive selected galaxies. The initial $\Sigma_{r}$, average background number density, and final calculated number density of our data can be seen in figure ~\ref{fig:compare}.
+
+This method is a variation of the one used in Tal (2013).
+
+\begin{figure}
+\figurenum{1}
+\centering
+\graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
+\includegraphics[width=\linewidth]{temp_compare}
+\DeclareGraphicsExtensions{.png}
+\caption{\footnotesize All galaxies plotted with number density compared to selected aperture radius. The average background number density per aperture radius is also included in red. The black line represents the average background number density subtracted from the calculated number density for all galaxies. The error bars show one standard deviation of thenumber density of the randomly selected background points at each aperture radius (the data used for the red line).}
+\label{fig:compare}
+\end{figure}
 
 \subsection{Error Estimates}
 
-talk about error bars for aperture radius. talk about error bars for nth nearest. talk about sources of error. look at Tomer's sources of error.
+A great source of error is the variation within the random background calculations for the aperture radius method. Beyond averaging four separate calculations, we show error bars for one standard deviation of the distribution of random background calculations for each galaxy within each radius. This represents the statistical uncertainty of our calculations.
+
+There are various systematic unccertainties that could affect our data as well. Innacuracy in redshift and mass measurements could move galaxies in and out of both the general selected sample as well as specific bins within the sample. At extremely small aperture radii, source blending could cause a smaller than expected number density. 
 
 \section{Results}
 
@@ -62,18 +87,26 @@ PUT IN APERTURE RADIUS REDSHIFT GRAPHIC
 \subsection{Variation over Mass}
 
 \begin{figure}
-\figurenum{1}
+\figurenum{2}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/nth_nearest/}}
 \includegraphics[width=\linewidth]{Mass_Density_Z}
 \DeclareGraphicsExtensions{.png}
-\caption{\footnotesize All of the galaxies sorted into four bins based on redshift and plotted with mass versus local galaxy number density (both on logarithmic scales). The black line represents the median point of eight mass bins for each subplot. There are error bars for the median absolute deviation of each median point. There is less variation of galaxy density with higher redshifts.}
+\caption{\footnotesize All of the galaxies sorted into four bins based on redshift and plotted with mass versus local galaxy number density (both on logarithmic scales). The black line represents the median point of eight mass bins for each subplot. There are error bars for the median absolute deviation of each median point. There is less variation of galaxy density with higher redshifts. An \textbf{\textit{n}} of 5 is used for the nth nearest calculation.}
 \label{fig:nth}
 \end{figure}
 
 More stuff happens as Mass increases. lets talk about it. See figure~\ref{fig:nth}
 
-PUT IN APERTURE RADIUS MASS GRAPHIC
+\begin{figure}
+\figurenum{3}
+\centering
+\graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
+\includegraphics[width=\linewidth]{temp_lmass_final}
+\DeclareGraphicsExtensions{.png}
+\caption{\footnotesize All of the galaxies sorted into four bins based on mass. Galaxy number density is plotted against selected aperture radius. The error bars represent one standard deviation of the subtracted number density of the randomly selected background points. There is a significant increase in local galaxy number density for extremely high mass galaxies at distances less than 1 one megaparsec.}
+\label{fig:mass}
+\end{figure}
 
 \section{Summary}
 
@@ -84,13 +117,8 @@ lots and lots and lots and lots andlots and lots andlots and lots andlots and lo
 
 \appendix
 
-\begin{thebibliography}{9}
+\bibliography{templateNotes}
 
-\bibliographystyle{plainnat}
-
-\bibitem{TOMER} Tomer Tal, 2012.
-
-\end{thebibliography}
-
+\bibliographystyle{plain}
 
 \end{document}
