@@ -118,13 +118,13 @@ lst_terror3 = [10**(-5.16),10**(-5.36),10**(-5.6),10**(-5.71),10**(-5.97),10**(-
 lst_terror4 = [10**(-5.02),10**(-5.28),10**(-5.41),10**(-5.63),10**(-5.8),10**(-6.0),10**(-6.23),10**(-6.34),10**(-6.44),10**(-6.55),10**(-6.61),10**(-6.73),10**(-6.79)]
 
 for i in range(len(lst_terror1)):
-    lst_terror1[i] = lst_terror1[i]/math.log10(2.0)
+    lst_terror1[i] = lst_terror1[i]/(2.0)
 for i in range(len(lst_terror2)):
-    lst_terror2[i] = lst_terror2[i]/math.log10(2.0)
+    lst_terror2[i] = lst_terror2[i]/(2.0)
 for i in range(len(lst_terror3)):
-    lst_terror3[i] = lst_terror3[i]/math.log10(2.0)
+    lst_terror3[i] = lst_terror3[i]/(2.0)
 for i in range(len(lst_terror4)):
-    lst_terror4[i] = lst_terror4[i]/math.log10(2.0)
+    lst_terror4[i] = lst_terror4[i]/(2.0)
 
 lst_tr = [10**(1.2),10**(1.4),10**(1.6),10**(1.8),10**(2.0),10**(2.2),10**(2.4),10**(2.6),10**(2.8),10**(3.0),10**(3.2),10**(3.4),10**(3.6)]
 
