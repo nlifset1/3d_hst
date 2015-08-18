@@ -13,15 +13,27 @@ os.chdir('C:\\3d_hst')
 
 #bring in the data#
 data = ascii.read("3dhst_master.phot.v4.1.cat")
-stuff = ascii.read('values_R.dat')
+stuff = ascii.read('values_R2.dat')
 
 #flag out the bad stuff#
 data_flagged = data[(data["use_phot"] == 1.0)]
 
-lst_errors1 = []
-lst_errors2 = []
-lst_errors3 = []
-lst_errors4 = []
+lst_errors1s1 = []
+lst_errors2s1 = []
+lst_errors3s1 = []
+lst_errors4s1 = []
+lst_errors1s2 = []
+lst_errors2s2 = []
+lst_errors3s2 = []
+lst_errors4s2 = []
+lst_errors1s3 = []
+lst_errors2s3 = []
+lst_errors3s3 = []
+lst_errors4s3 = []
+lst_errors1s4 = []
+lst_errors2s4 = []
+lst_errors3s4 = []
+lst_errors4s4 = []
 
 lst_radius = 10**np.linspace(1.2,3.6,13)
 
@@ -43,32 +55,68 @@ for gal in stuff:
 
 for i in range(len(lst_radius)):
     print '%s' % (i)
-    lst_rand1 = []
+    lst_rand1s1 = []
+    lst_rand1s2 = []
+    lst_rand1s3 = []
+    lst_rand1s4 = []
     for gal in lst_gal1:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand1.append(gal_info['rand{}'.format(i+1)])
-    lst_errors1.append(np.std(lst_rand1))
+        lst_rand1s1.append(gal_info['rand1r{}'.format(i+1)])
+        lst_rand1s2.append(gal_info['rand2r{}'.format(i+1)])
+        lst_rand1s3.append(gal_info['rand3r{}'.format(i+1)])
+        lst_rand1s4.append(gal_info['rand4r{}'.format(i+1)])
+    lst_errors1s1.append(np.std(lst_rand1s1))
+    lst_errors1s2.append(np.std(lst_rand1s2))
+    lst_errors1s3.append(np.std(lst_rand1s3))
+    lst_errors1s4.append(np.std(lst_rand1s4))
 
-    lst_rand2 = []
+    lst_rand2s1 = []
+    lst_rand2s2 = []
+    lst_rand2s3 = []
+    lst_rand2s4 = []
     for gal in lst_gal2:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand2.append(gal_info['rand{}'.format(i+1)])
-    lst_errors2.append(np.std(lst_rand2))
+        lst_rand2s1.append(gal_info['rand1r{}'.format(i+1)])
+        lst_rand2s2.append(gal_info['rand2r{}'.format(i+1)])
+        lst_rand2s3.append(gal_info['rand3r{}'.format(i+1)])
+        lst_rand2s4.append(gal_info['rand4r{}'.format(i+1)])
+    lst_errors2s1.append(np.std(lst_rand2s1))
+    lst_errors2s2.append(np.std(lst_rand2s2))
+    lst_errors2s3.append(np.std(lst_rand2s3))
+    lst_errors2s4.append(np.std(lst_rand2s4))
 
-    lst_rand3 = []
+    lst_rand3s1 = []
+    lst_rand3s2 = []
+    lst_rand3s3 = []
+    lst_rand3s4 = []
     for gal in lst_gal3:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand3.append(gal_info['rand{}'.format(i+1)])
-    lst_errors3.append(np.std(lst_rand3))
+        lst_rand3s1.append(gal_info['rand1r{}'.format(i+1)])
+        lst_rand3s2.append(gal_info['rand2r{}'.format(i+1)])
+        lst_rand3s3.append(gal_info['rand3r{}'.format(i+1)])
+        lst_rand3s4.append(gal_info['rand4r{}'.format(i+1)])
+    lst_errors3s1.append(np.std(lst_rand3s1))
+    lst_errors3s2.append(np.std(lst_rand3s2))
+    lst_errors3s3.append(np.std(lst_rand3s3))
+    lst_errors3s4.append(np.std(lst_rand3s4))
 
-    lst_rand4 = []
+    lst_rand4s1 = []
+    lst_rand4s2 = []
+    lst_rand4s3 = []
+    lst_rand4s4 = []
     for gal in lst_gal4:
         gal_info = stuff[(stuff['id'] == gal[0]) & (stuff['field'] == gal[1])]
-        lst_rand4.append(gal_info['rand{}'.format(i+1)])
-    lst_errors4.append(np.std(lst_rand4))
+        lst_rand4s1.append(gal_info['rand1r{}'.format(i+1)])
+        lst_rand4s2.append(gal_info['rand2r{}'.format(i+1)])
+        lst_rand4s3.append(gal_info['rand3r{}'.format(i+1)])
+        lst_rand4s4.append(gal_info['rand4r{}'.format(i+1)])
+    lst_errors4s1.append(np.std(lst_rand4s1))
+    lst_errors4s2.append(np.std(lst_rand4s2))
+    lst_errors4s3.append(np.std(lst_rand4s3))
+    lst_errors4s4.append(np.std(lst_rand4s4))
 
-data = Table([lst_errors1,lst_errors2,lst_errors3,lst_errors4], names=['std1','std2','std3','std4'])
-ascii.write(data, 'lmass_errors.dat')
+data = Table([lst_errors1s1,lst_errors1s2,lst_errors1s3,lst_errors1s4,lst_errors2s1,lst_errors2s2,lst_errors2s3,lst_errors2s4,lst_errors3s1,lst_errors3s2,lst_errors3s4,lst_errors3s4,lst_errors4s1,lst_errors4s2,lst_errors4s3,lst_errors4s4], names=['std1s1','std1s2','std1s3','std1s4','std2s1','std2s2','std2s3','std2s4','std3s1','std3s2','std3s3','std3s4','std4s1','std4s2','std4s3','std4s4'])
+ascii.write(data, 'lmass_errors2.dat')
 
 
 

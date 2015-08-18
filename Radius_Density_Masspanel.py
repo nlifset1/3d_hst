@@ -61,7 +61,7 @@ for error in errors:
 #bin 1: 11.0 < lmass < 11.15#
 #bin 2: 11.15 < lmass < 11.3#
 #bin 3: 11.3 < lmass < 11.45#
-#bin 4: 11.45 < lmass < 11.6#
+#bin 4: 11.45 < lmass < 11.8#
 lst_gal1 = []
 lst_gal2 = []
 lst_gal3 = []
@@ -148,10 +148,10 @@ for i in range(len(lst_r)):
         density_rand2 = gal_info['rand2r%s' % (i+1)]
         density_rand3 = gal_info['rand3r%s' % (i+1)]
         density_rand4 = gal_info['rand4r%s' % (i+1)]
-        density_total1s1 += (density1 - density_rand1)
-        density_total1s2 += (density2 - density_rand2)
-        density_total1s3 += (density3 - density_rand3)
-        density_total1s4 += (density4 - density_rand4)
+        density_total4s1 += (density1 - density_rand1)
+        density_total4s2 += (density2 - density_rand2)
+        density_total4s3 += (density3 - density_rand3)
+        density_total4s4 += (density4 - density_rand4)
     #averaging density of each galaxy at each radius#
     density_ave4s1 = float(density_total4s1)/len(lst_gal4)
     density_ave4s2 = float(density_total4s2)/len(lst_gal4)
@@ -176,10 +176,10 @@ for i in range(len(lst_r)):
         density_rand2 = gal_info['rand2r%s' % (i+1)]
         density_rand3 = gal_info['rand3r%s' % (i+1)]
         density_rand4 = gal_info['rand4r%s' % (i+1)]
-        density_total1s1 += (density1 - density_rand1)
-        density_total1s2 += (density2 - density_rand2)
-        density_total1s3 += (density3 - density_rand3)
-        density_total1s4 += (density4 - density_rand4)
+        density_total3s1 += (density1 - density_rand1)
+        density_total3s2 += (density2 - density_rand2)
+        density_total3s3 += (density3 - density_rand3)
+        density_total3s4 += (density4 - density_rand4)
     #averaging density of each galaxy at each radius#
     density_ave3s1 = float(density_total3s1)/len(lst_gal3)
     density_ave3s2 = float(density_total3s2)/len(lst_gal3)
@@ -205,10 +205,10 @@ for i in range(len(lst_r)):
         density_rand2 = gal_info['rand2r%s' % (i+1)]
         density_rand3 = gal_info['rand3r%s' % (i+1)]
         density_rand4 = gal_info['rand4r%s' % (i+1)]
-        density_total1s1 += (density1 - density_rand1)
-        density_total1s2 += (density2 - density_rand2)
-        density_total1s3 += (density3 - density_rand3)
-        density_total1s4 += (density4 - density_rand4)
+        density_total2s1 += (density1 - density_rand1)
+        density_total2s2 += (density2 - density_rand2)
+        density_total2s3 += (density3 - density_rand3)
+        density_total2s4 += (density4 - density_rand4)
     #averaging density of each galaxy at each radius#
     density_ave2s1 = float(density_total2s1)/len(lst_gal2)
     density_ave2s2 = float(density_total2s2)/len(lst_gal2)
@@ -251,13 +251,18 @@ a4.errorbar(lst_r, lst_density4s4, yerr=lst_errors4s4, color='y', marker='o', ma
 
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Mass Bins', fontsize=17)
-fig.text(0.44, 0.01, "Aperture Radius (kpc)", fontsize=18)
-fig.text(0.01, 0.9, "Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", rotation = "vertical", fontsize=18)
+fig.text(0.35, 0.01, "Aperture Radius (kpc)", fontsize=18)
+fig.text(0.01, 0.85, "Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", rotation = "vertical", fontsize=18)
 
 a1.legend(loc=1, prop={'size':9})
 a2.legend(loc=1, prop={'size':9})
 a3.legend(loc=1, prop={'size':9})
 a4.legend(loc=1, prop={'size':9})
+
+a1.set_title('11.0 < Central Lmass < 11.15', fontsize=12)
+a2.set_title('11.15 < Central Lmass < 11.3', fontsize=12)
+a3.set_title('11.3 < Central Lmass < 11.45', fontsize=12)
+a4.set_title('11.45 < Central Lmass', fontsize=12)
 
 pylab.xlim([10,5000])
 pylab.ylim([0.0000001,0.002])
@@ -273,7 +278,6 @@ a3.set_xscale('log')
 a4.set_xscale('log')
 
 fig.subplots_adjust(hspace=0.1, wspace=0.1)
-
 
 pylab.ion()
 pylab.show()
