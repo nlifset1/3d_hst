@@ -219,65 +219,48 @@ for i in range(len(lst_r)):
     lst_density2s3.append(density_ave2s3)
     lst_density2s4.append(density_ave2s4)
 
+
+#averaging the four panels together into one because I messed up#
+lst_density1 = []
+lst_density2 = []
+lst_density3 = []
+lst_density4 = []
+
+lst_errors1 = []
+lst_errors2 = []
+lst_errors3 = []
+lst_errors4 = []
+
+for i in range(13):
+    lst_density1.append((lst_density1s1[i] + lst_density2s1[i] + lst_density3s1[i] + lst_density4s1[i])/4.0)
+    lst_density2.append((lst_density1s2[i] + lst_density2s2[i] + lst_density3s2[i] + lst_density4s2[i])/4.0)
+    lst_density3.append((lst_density1s3[i] + lst_density2s3[i] + lst_density3s3[i] + lst_density4s3[i])/4.0)
+    lst_density4.append((lst_density1s4[i] + lst_density2s4[i] + lst_density3s4[i] + lst_density4s4[i])/4.0)
+
+    lst_errors1.append((lst_errors1s1[i] + lst_errors2s1[i] + lst_errors3s1[i] + lst_errors4s1[i])/4.0)
+    lst_errors2.append((lst_errors1s2[i] + lst_errors2s2[i] + lst_errors3s2[i] + lst_errors4s2[i])/4.0)
+    lst_errors3.append((lst_errors1s3[i] + lst_errors2s3[i] + lst_errors3s3[i] + lst_errors4s3[i])/4.0)
+    lst_errors4.append((lst_errors1s4[i] + lst_errors2s4[i] + lst_errors3s4[i] + lst_errors4s4[i])/4.0)
+
     
 #plotting radius vs density#
 
-fig,pylab.axes = pylab.subplots(2, 2, sharex = True, sharey = True)
-
-a1 = pylab.axes[0,0]
-a2 = pylab.axes[0,1]
-a3 = pylab.axes[1,0]
-a4 = pylab.axes[1,1]
-
-a1.errorbar(lst_r, lst_density1s1, yerr=lst_errors1s1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '9.415 < Sat. Lmass < 9.8')
-a1.errorbar(lst_r, lst_density1s2, yerr=lst_errors1s2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '9.8 < Sat. LMass < 10.3')
-a1.errorbar(lst_r, lst_density1s3, yerr=lst_errors1s3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '10.3 < Sat. LMass < 10.8')
-a1.errorbar(lst_r, lst_density1s4, yerr=lst_errors1s4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '10.8 < Sat. LMass')
-
-a2.errorbar(lst_r, lst_density2s1, yerr=lst_errors2s1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '9.415 < Sat. Lmass < 9.8')
-a2.errorbar(lst_r, lst_density2s2, yerr=lst_errors2s2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '9.8 < Sat. LMass < 10.3')
-a2.errorbar(lst_r, lst_density2s3, yerr=lst_errors2s3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '10.3 < Sat. LMass < 10.8')
-a2.errorbar(lst_r, lst_density2s4, yerr=lst_errors2s4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '10.8 < Sat. LMass')
-
-a3.errorbar(lst_r, lst_density3s1, yerr=lst_errors3s1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '9.415 < Sat. Lmass < 9.8')
-a3.errorbar(lst_r, lst_density3s2, yerr=lst_errors3s2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '9.8 < Sat. LMass < 10.3')
-a3.errorbar(lst_r, lst_density3s3, yerr=lst_errors3s3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '10.3 < Sat. LMass < 10.8')
-a3.errorbar(lst_r, lst_density3s4, yerr=lst_errors3s4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '10.8 < Sat. LMass')
-
-a4.errorbar(lst_r, lst_density4s1, yerr=lst_errors4s1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '9.415 < Sat. Lmass < 9.8')
-a4.errorbar(lst_r, lst_density4s2, yerr=lst_errors4s2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '9.8 < Sat. LMass < 10.3')
-a4.errorbar(lst_r, lst_density4s3, yerr=lst_errors4s3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '10.3 < Sat. LMass < 10.8')
-a4.errorbar(lst_r, lst_density4s4, yerr=lst_errors4s4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '10.8 < Sat. LMass')
-
+pylab.errorbar(lst_r, lst_density1, yerr=lst_errors1, color='r', marker='o', markeredgecolor='none', linestyle='-', label = '9.415 < Sat. Lmass < 9.8')
+pylab.errorbar(lst_r, lst_density2, yerr=lst_errors2, color='b', marker='o', markeredgecolor='none', linestyle='-', label = '9.8 < Sat. LMass < 10.3')
+pylab.errorbar(lst_r, lst_density3, yerr=lst_errors3, color='g', marker='o', markeredgecolor='none', linestyle='-', label = '10.3 < Sat. LMass < 10.8')
+pylab.errorbar(lst_r, lst_density4, yerr=lst_errors4, color='y', marker='o', markeredgecolor='none', linestyle='-', label = '10.8 < Sat. LMass')
 
 pylab.suptitle('Galaxy Number Density per Aperture Radius in Four Mass Bins', fontsize=17)
-fig.text(0.35, 0.01, "Aperture Radius (kpc)", fontsize=18)
-fig.text(0.01, 0.85, "Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", rotation = "vertical", fontsize=18)
+pylab.xlabel("Aperture Radius (kpc)", fontsize=18)
+pylab.ylabel("Log Galaxy Number Density ($N_{gal}$ $kpc^{-2}$)", fontsize=18)
 
-a1.legend(loc=1, prop={'size':9})
-a2.legend(loc=1, prop={'size':9})
-a3.legend(loc=1, prop={'size':9})
-a4.legend(loc=1, prop={'size':9})
-
-a1.set_title('11.0 < Central Lmass < 11.15', fontsize=12)
-a2.set_title('11.15 < Central Lmass < 11.3', fontsize=12)
-a3.set_title('11.3 < Central Lmass < 11.45', fontsize=12)
-a4.set_title('11.45 < Central Lmass', fontsize=12)
+pylab.legend(loc=1)
 
 pylab.xlim([10,5000])
-pylab.ylim([0.0000001,0.002])
+pylab.ylim([0.00000002,0.0002])
 
-a1.set_yscale('log')
-a2.set_yscale('log')
-a3.set_yscale('log')
-a4.set_yscale('log')
-
-a1.set_xscale('log')
-a2.set_xscale('log')
-a3.set_xscale('log')
-a4.set_xscale('log')
-
-fig.subplots_adjust(hspace=0.1, wspace=0.1)
+pylab.yscale('log')
+pylab.xscale('log')
 
 pylab.ion()
 pylab.show()

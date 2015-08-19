@@ -80,15 +80,15 @@ for i in range(len(data_flagged)):
             lst_b_vj4.append(vj)
         star_forming += 1
 
-pylab.plot(lst_r_vj1, lst_r_uv1, color='r', markeredgecolor='none', marker='o', linestyle='none', alpha=0.7, label='11.0<Lmass<11.15')
-pylab.plot(lst_r_vj2, lst_r_uv2, color='r', markeredgecolor='k', marker='o', linestyle='none', alpha=0.7, label='11.15<Lmass<11.3')
-pylab.plot(lst_r_vj3, lst_r_uv3, color='orange', markeredgecolor='none', marker='o', linestyle='none', alpha=0.7, label='11.3<Lmass<11.45')
-pylab.plot(lst_r_vj4, lst_r_uv4, color='orange', markeredgecolor='k', marker='o', linestyle='none', alpha=0.7, label='11.45<Lmass')
+pylab.plot(lst_r_vj1, lst_r_uv1, color='#fcae91', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.0<Lmass<11.15')
+pylab.plot(lst_r_vj2, lst_r_uv2, color='#fb6a4a', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.15<Lmass<11.3')
+pylab.plot(lst_r_vj3, lst_r_uv3, color='#de2d26', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.3<Lmass<11.45')
+pylab.plot(lst_r_vj4, lst_r_uv4, color='#a50f15', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.45<Lmass')
 
-pylab.plot(lst_b_vj1, lst_b_uv1, color='b', markeredgecolor='none', marker='o', linestyle='none', alpha=0.7, label='11.0<Lmass<11.15')
-pylab.plot(lst_b_vj2, lst_b_uv2, color='b', markeredgecolor='k', marker='o', linestyle='none', alpha=0.7, label='11.15<Lmass<11.3')
-pylab.plot(lst_b_vj3, lst_b_uv3, color='purple', markeredgecolor='none', marker='o', linestyle='none', alpha=0.7, label='11.3<Lmass<11.45')
-pylab.plot(lst_b_vj4, lst_b_uv4, color='purple', markeredgecolor='k', marker='o', linestyle='none', alpha=0.7, label='11.45<Lmass')
+pylab.plot(lst_b_vj1, lst_b_uv1, color='#9ecae1', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.0<Lmass<11.15')
+pylab.plot(lst_b_vj2, lst_b_uv2, color='#6baed6', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.15<Lmass<11.3')
+pylab.plot(lst_b_vj3, lst_b_uv3, color='#3182bd', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.3<Lmass<11.45')
+pylab.plot(lst_b_vj4, lst_b_uv4, color='#08519c', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.45<Lmass')
 
 pylab.text(0.05,2.35, 'Quiescent(%s)' % (quiescent), fontsize=12, fontweight='bold')
 pylab.text(0.5,0.08, 'Star-Forming(%s)' % (star_forming), fontsize=12, fontweight='bold')
@@ -102,9 +102,9 @@ pylab.legend(loc=4)
 pylab.xlim([0,2.5])
 pylab.ylim([0,2.5])
 
-pylab.xlabel('(V-J)$_{rest}$', fontsize=16)
-pylab.ylabel('(U-V)$_{rest}$', fontsize=16)
-pylab.suptitle('Quiescent and Star-Forming Galaxies in Four Mass Bins', fontsize=18)
+pylab.xlabel('(V-J)$_{rest}$', fontsize=18)
+pylab.ylabel('(U-V)$_{rest}$', fontsize=18)
+pylab.suptitle('Quiescent and Star-Forming Central Galaxies in Four Mass Bins', fontsize=18)
 
 pylab.ion()
 pylab.show()
