@@ -27,7 +27,7 @@ data_other = data[mask]
 print 'there are %s galaxies' % (len(data_flagged))
 
 
-
+#initializing lists and counts for quiescent and star-forming#
 lst_r_uv1 = []
 lst_r_vj1 = []
 lst_b_uv1 = []
@@ -47,6 +47,9 @@ lst_b_vj4 = []
 quiescent = 0
 star_forming = 0
 
+#calculating uv and vj of each galaxy and then sorting them based on that info#
+#r is for quiescent, b is for star-forming#
+#binning based on mass too, with low number at end for low mass bin#
 for i in range(len(data_flagged)):
     gal = data_flagged[i]
     uv = -2.5*np.log10(gal['L153']/gal['L155'])
@@ -79,6 +82,8 @@ for i in range(len(data_flagged)):
             lst_b_uv4.append(uv)
             lst_b_vj4.append(vj)
         star_forming += 1
+
+#plotting#
 
 pylab.plot(lst_r_vj1, lst_r_uv1, color='#fcae91', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.0<Lmass<11.15')
 pylab.plot(lst_r_vj2, lst_r_uv2, color='#fb6a4a', markeredgecolor='none', marker='o', linestyle='none', alpha=0.9, label='11.15<Lmass<11.3')

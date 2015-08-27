@@ -19,7 +19,7 @@ os.chdir('C:\\3d_hst')
 print 'getting data'
 data = ascii.read('color_tabled.dat')
 
-#making lists for the plot#
+#initializing lists for the plot#
 lst_r = 10**np.linspace(1.2,3.6,13)
 
 lst_q1 = []
@@ -35,6 +35,9 @@ lst_q4 = []
 lst_all4 = []
 lst_sf4 = []
 
+#creating masks to separate data into lists based on redshift and sfr#
+#q is for quiescent centrals, sf for star-forming centrals, all for all centrals#
+#number at end for redshift bin, lower means lwer redshift#
 mask_q1 = ((data['z'] > 0.5) & (data['z'] <= 1.0) & (((data['vj'] < 0.92) & (data['uv'] > 1.3)) | ((data['vj'] > 0.8) & (data['vj'] < 1.6) & (data['uv'] > (0.88*data['vj'] +0.49)))))
 mask_sf1 = ((data['z'] > 0.5) & (data['z'] <= 1.0) & (((data['vj'] < 0.92) & (data['uv'] < 1.3)) | ((data['vj'] > 0.8) & (data['vj'] < 1.6) & (data['uv'] < (0.88*data['vj'] +0.49))) | (data['vj']>1.5)))
 mask_all1 = ((data['z'] > 0.5) & (data['z'] <= 1.0))
@@ -48,6 +51,7 @@ mask_q4 = ((data['z'] > 2.0) & (data['z'] <= 2.5) & (((data['vj'] < 0.92) & (dat
 mask_sf4 = ((data['z'] > 2.0) & (data['z'] <= 2.5) & (((data['vj'] < 0.92) & (data['uv'] < 1.3)) | ((data['vj'] > 0.8) & (data['vj'] < 1.6) & (data['uv'] < (0.88*data['vj'] +0.49))) | (data['vj']>1.5)))
 mask_all4 = ((data['z'] > 2.0) & (data['z'] <= 2.5))
 
+#masking the data#
 q1 = data[mask_q1]
 sf1 = data[mask_sf1]
 all1 = data[mask_all1]
@@ -61,14 +65,17 @@ q4 = data[mask_q4]
 sf4 = data[mask_sf4]
 all4 = data[mask_all4]
 
+#pulling necessary info from data#
 for i in range(len(lst_r)):
     radius_label = 'q%s' % (i+1)
     temp = 0
     temp_counts = 0
     for gal in q1:
+        #pulling out info points that were previously set to 5 due to being divided by 0#
         if gal[radius_label] != 5:
             temp += gal[radius_label]
             temp_counts += 1
+    #calculating average quiescent percentage at this radius#
     temp = temp/float(temp_counts)
     lst_q1.append(temp)
 
@@ -171,6 +178,7 @@ for i in range(len(lst_r)):
     temp = temp/float(temp_counts)
     lst_all4.append(temp)
 
+#calculating conformity based on quiescent percentage of various centrals#
 lst_c1 = []
 lst_c2 = []
 lst_c3 = []

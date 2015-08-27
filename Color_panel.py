@@ -15,6 +15,7 @@ print 'getting data'
 data = ascii.read('values_color.dat')
 
 #getting error data#
+#help: lst_errors [central color] s [satellite color] [redshift bin number]#
 errors = ascii.read('color_errors.dat')
 lst_errorsrsr1 = []
 lst_errorsrsb1 = []
@@ -50,7 +51,7 @@ for error in errors:
     lst_errorsbsr4.append(error[14])
     lst_errorsbsb4.append(error[15])
 
-#splitting the central galaxies into two bins based on ssfr#
+#splitting the central galaxies into two bins based on sfr#
 lst_galr = []
 lst_galb = []
 print 'binning'
@@ -95,11 +96,11 @@ for gal in lst_galb:
         lst_galb4.append(gal)
 
 
-#making lists for the plot#
+#initializing lists for the plot#
 lst_r = 10**np.linspace(1.2,3.6,13)
 
 
-
+#help: lst_density [central color] s [satellite color] [redshift bin number]#
 lst_densityrsr1 = []
 lst_densityrsb1 = []
 lst_densitybsr1 = []
@@ -117,6 +118,8 @@ lst_densityrsb4 = []
 lst_densitybsr4 = []
 lst_densitybsb4 = []
 
+#pulling necessary info from data for the lists#
+#also calculating average density for each bin at each radius#
 for i in range(len(lst_r)):
     radius_labelr = 'densityrr%s' % (i+1)
     radius_labelb = 'densitybr%s' % (i+1)

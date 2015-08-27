@@ -24,10 +24,12 @@ data_flagged = data_me[mask]
 data_other = data[mask]
 print 'there are %s galaxies' % (len(data_flagged))
 
+#select only galxies within ranges set for potential satellites#
 mask2 = ((data_other['lmass'] >= 9.415) & (data_other['z_peak'] >= 0.4) & (data_other['z_peak'] <= 2.6))
 data_color = data_flagged[mask2]
 data_info = data_other[mask2]
 
+#initializing lists of data to put in the file#
 lst_id = []
 lst_field = []
 lst_ra = []
@@ -37,6 +39,7 @@ lst_lmass = []
 lst_uv = []
 lst_vj = []
 
+#getting the necessary data for lists, as well as calculating uv and vj#
 for i in range(len(data_color)):
     gal = data_color[i]
     gal_info = data_info[i]
@@ -52,7 +55,7 @@ for i in range(len(data_color)):
     lst_uv.append(uv)
     lst_vj.append(vj)
 
-
+#writing table#
 table = Table([lst_id, lst_field, lst_ra, lst_dec, lst_z, lst_lmass, lst_uv, lst_vj], names=['id', 'field', 'ra', 'dec', 'z', 'lmass', 'uv', 'vj'])
 ascii.write(table, 'color_values.dat')
 

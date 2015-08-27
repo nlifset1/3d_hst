@@ -14,6 +14,8 @@ os.chdir('C:\\3d_hst')
 #bring in the data#
 data = ascii.read("values_color.dat")
 
+#initializing lists#
+#a little help: lst_errors [color of central] s [color of satellites] [redshift bin]#
 lst_errorsrsr1 = []
 lst_errorsbsr1 = []
 lst_errorsrsb1 = []
@@ -39,6 +41,7 @@ lst_radius = 10**np.linspace(1.2,3.6,13)
 lst_galr = []
 lst_galb = []
 
+#separating the galaxies into quiescent(r) and star-forming(b) lists#
 print 'binning'
 for gal in data:
     uv = gal['uv']
@@ -80,6 +83,7 @@ for gal in lst_galb:
     elif gal_info['z'] < 2.5:
         lst_galb4.append(gal)
 
+#for each radius and then each galaxy, pulling data on the random densities, and calculating std for error bars#
 for i in range(len(lst_radius)):
     print '%s' % (i)
     lst_randrsr1 = []
@@ -154,7 +158,7 @@ for i in range(len(lst_radius)):
     lst_errorsbsr4.append(np.std(lst_randbsr4))
     lst_errorsbsb4.append(np.std(lst_randbsb4))
 
-
+#writing the table#
 data = Table([lst_errorsrsr1,lst_errorsrsb1,lst_errorsbsr1,lst_errorsbsb1,lst_errorsrsr2,lst_errorsrsb2,lst_errorsbsr2,lst_errorsbsb2,lst_errorsrsr3,lst_errorsrsb3,lst_errorsbsr3,lst_errorsbsb3,lst_errorsrsr4,lst_errorsrsb4,lst_errorsbsr4,lst_errorsbsb4], names=['stdrsr1','stdrsb1','std1bsr1','stdbsb1','stdrsr2','stdrsb2','std1bsr2','stdbsb2','stdrsr3','stdrsb3','std1bsr3','stdbsb3','stdrsr4','stdrsb4','std1bsr4','stdbsb4'])
 ascii.write(data, 'color_errors.dat')
 

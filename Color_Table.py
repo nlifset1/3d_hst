@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import pylab
 os.chdir('C:\\3d_hst')
 
+#bringing in the data#
 print 'getting data'
 data = ascii.read('C:\\3d_hst/color_values.dat')
 
@@ -24,6 +25,7 @@ def Counts(gal_id, gal_field, z, R = 10**np.linspace(1.2,3.6,13), delta_z = 0.1,
     lst_gal = []
     data_tmp = data[data['field'] == gal_field]
 
+    #separating the potential satellites into star-forming(b) and quiescent(r) bins#
     mask = ((np.abs(data_tmp['z'] - z) <= delta_z) & (data_tmp['id'] != gal_id) & (data_tmp['lmass'] >= min_mass))
     lst_gal = data_tmp[mask]
     lst_galr = lst_gal[(((lst_gal['vj'] < 0.92) & (lst_gal['uv'] > 1.3)) | ((lst_gal['vj'] > 0.8) & (lst_gal['vj'] < 1.6) & (lst_gal['uv'] > (0.88*lst_gal['vj'] +0.49))))]
@@ -103,40 +105,50 @@ def rand_counts(gal_field, z, R = 10**np.linspace(1.2,3.6,13), delta_z = 0.1, mi
         nn1[ii] = np.sum(sep1 <= r)
         nn2[ii] = np.sum(sep2 <= r)
 
+    #nn1 is density list for quiescent, nn2 is for star-forming#
     return [nn1, nn2]
 
-
+#creating a function that turns list of just counts within various radii into density at various radii#
 def Density(gal_id, gal_field):
+    #pulling info and initializing lists#
     gal_info = gal_info = data[(data['id'] == gal_id) & (data['field'] == gal_field)]
     lst_r = 10**np.linspace(1.2,3.6,13)
     lst_dens1 = []
     lst_dens2 = []
+    #getting counts for the specific galaxy#
     lst = Counts(gal_id, gal_field, gal_info['z'])
+    #calculating density for each element of the list#
     for i in range(len(lst_r)):
         lst_dens1.append(lst[0][i]/((lst_r[i]**2)*math.pi))
         lst_dens2.append(lst[1][i]/((lst_r[i]**2)*math.pi))
+    #dens1 is for quiescent, dens2 is for star-forming#
     return [lst_dens1, lst_dens2]
 
+#creating a function similar to Density but for randomly selected points#
 def Density_rand(gal_id, gal_field):
+    #pulling info and initializing lists#
     gal_info = gal_info = data[(data['id'] == gal_id) & (data['field'] == gal_field)]
     lst_r = 10**np.linspace(1.2,3.6,13)
     lst_dens1 = []
     lst_dens2 = []
+    #getting counts for a random point in the field of specified galaxy and at its z#
     lst1 = rand_counts(gal_field, gal_info['z'])
     lst2 = rand_counts(gal_field, gal_info['z'])
+    #doing a complicated process for averaging four different random points#
     lst = [[],[],[],[]]
     for i in range(len(lst1)):
         lst[i] = [sum(x) for x in zip(lst1[i], lst2[i])]
     for i in range(len(lst_r)):
         lst_dens1.append((lst[0][i]/((lst_r[i]**2)*math.pi))/4.0)
         lst_dens2.append((lst[1][i]/((lst_r[i]**2)*math.pi))/4.0)
+    #dens1 is for quiescent, dens2 is for star-forming#
     return [lst_dens1, lst_dens2]
 
 
 
 def main():
 
-
+    #bringing in the data#
     data = ascii.read('C:\\3d_hst/color_values.dat')
     print "Getting list of galaxies."
     #getting a list of galaxies with lmass >= 11.0 and within the redshift range of 0.5<z<2.5#
@@ -173,6 +185,8 @@ def main():
                 if (gal_info['dec'] >= -0.091376/(math.pi/180)) and (gal_info['dec'] <= -0.090305/(math.pi/180)):
                     lst_gal.append(gal)
 
+    #initializing a lot of lists#
+    #for the density lists: lst_density [color of central] [color of satellite] [radius bin]#
     lst_id = []
     lst_field = []
     lst_z = []
@@ -237,7 +251,7 @@ def main():
     lst_uv =[]
     lst_vj = []
 
-
+    #getting and calculating the necessary info for the lists#
     print "Final count is {}.".format(len(lst_gal))           
     for ii, gal in enumerate(lst_gal):
         print ii
@@ -251,6 +265,7 @@ def main():
         lst_density.append(Density(gal[0],gal[1]))
         lst_density_rand.append(Density_rand(gal[0],gal[1]))
 
+    #splitting the density info into separate lists based on radius#
     for gal in lst_density:
         lst_densityrr1.append(gal[0][0])
         lst_densitybr1.append(gal[1][0])
@@ -306,7 +321,7 @@ def main():
         lst_density_randrr13.append(gal[0][12])
         lst_density_randbr13.append(gal[1][12])
 
-
+    #writing the table#
     print "Gonna write table."
 
     data = Table([lst_id, lst_field, lst_z, lst_lmass, lst_uv, lst_vj, lst_densityrr1, lst_densitybr1, lst_densityrr2, lst_densitybr2, lst_densityrr3, lst_densitybr3, lst_densityrr4, lst_densitybr4, lst_densityrr5, lst_densitybr5, lst_densityrr6, lst_densitybr6, lst_densityrr7, lst_densitybr7, lst_densityrr8, lst_densitybr8, lst_densityrr9, lst_densitybr9, lst_densityrr10, lst_densitybr10, lst_densityrr11, lst_densitybr11, lst_densityrr12, lst_densitybr12, lst_densityrr13, lst_densitybr13, lst_density_randrr1, lst_density_randbr1, lst_density_randrr2, lst_density_randbr2, lst_density_randrr3, lst_density_randbr3, lst_density_randrr4, lst_density_randbr4, lst_density_randrr5, lst_density_randbr5, lst_density_randrr6, lst_density_randbr6, lst_density_randrr7, lst_density_randbr7, lst_density_randrr8, lst_density_randbr8, lst_density_randrr9, lst_density_randbr9, lst_density_randrr10, lst_density_randbr10, lst_density_randrr11, lst_density_randbr11, lst_density_randrr12, lst_density_randbr12, lst_density_randrr13, lst_density_randbr13], names=['id', 'field', 'z', 'lmass', 'uv', 'vj', 'densityrr1', 'densitybr1', 'densityrr2', 'densitybr2', 'densityrr3', 'densitybr3', 'densityrr4', 'densitybr4', 'densityrr5', 'densitybr5', 'densityrr6', 'densitybr6', 'densityrr7', 'densitybr7', 'densityrr8', 'densitybr8', 'densityrr9', 'densitybr9', 'densityrr10', 'densitybr10', 'densityrr11', 'densitybr11', 'densityrr12', 'densitybr12', 'densityrr13', 'densitybr13', 'randrr1', 'randbr1', 'randrr2', 'randbr2', 'randrr3', 'randbr3', 'randrr4', 'randbr4', 'randrr5', 'randbr5', 'randrr6', 'randbr6', 'randrr7', 'randbr7', 'randrr8', 'randbr8', 'randrr9', 'randbr9', 'randrr10', 'randbr10', 'randrr11', 'randbr11', 'randrr12', 'randbr12', 'randrr13', 'randbr13'])

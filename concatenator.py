@@ -17,6 +17,7 @@ data_goodsn = ascii.read('C:\\3d_hst/goodsn_3dhst.v4.1.master.RF')
 print 'uds'
 data_uds = ascii.read('C:\\3d_hst/uds_3dhst.v4.1.master.RF')
 
+#concatenating all the fields into one and writing it to a file#
 print 'concatenating'
 data_1 = vstack([data_aegis, data_cosmos])
 data_2 = vstack([data_goodss, data_goodsn])
