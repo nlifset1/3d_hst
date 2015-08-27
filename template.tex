@@ -23,7 +23,7 @@ We study the local galaxy number density environments of very massive galaxies i
 
 \section{Introduction}
 
-The properties of galaxies are largely affected by their local environments and vice-versa. Local galaxy environments have been shown to correlate with a number of important properties, such as morphology, mass, star formation rate, and stellar colors. Less is known, though, about local galaxy environment and redshift, especially at Z\textgreater1. One of the most powerful tools for studying local galaxy environment is looking at the local galaxy number density for a selected sample of galaxies. Binning the central or satellite galaxies based on certain properties can allow a serious analysis of the prevalence of various galaxy properties in the local environments of selected central galaxies. 
+The properties of galaxies are largely affected by their local environments and vice-versa. Local galaxy environments have been shown to correlate with a number of important properties, such as morphology, mass, star formation rate, and stellar colors. Less is known, though, about local galaxy environment and redshift, especially at  $z$\textgreater1. One of the most powerful tools for studying local galaxy environment is looking at the local galaxy number density for a selected sample of galaxies. Binning the central or satellite galaxies based on certain properties can allow a serious analysis of the prevalence of various galaxy properties in the local environments of selected central galaxies. 
 
 In this paper, we use two of the most common methods for calculating galaxy number density around selected central galaxies: counts in aperture radius and nth nearest galaxy. Counts in aperture radius allow us to study galaxy number density in both the immediate local environment as well as the more general environment depending on what aperture radius is selected. The nth nearest galaxy method can be used to show both local and general environment, but it is most commonly used for just the local environment. This is because it is more accurate in depicting galaxy number density at small radii ~\cite{2005ApJ...634..833C}. 
 
@@ -74,7 +74,7 @@ This method is a variation of the one used in Tal (2013)~\cite{2013ApJ...769...3
 
 \subsection{Star-Formation Rate}
 
-We also look at the star-formation rates of both the cenrtal and satellite galaxies. Using a rest frame U-V versus V-J graph, we sort the galaxies, central and satellite, into quiescent and star-forming groups. The vast majority of central galaxies are star-forming as can be seen in figure ~\ref{fig:color}. There is a fairly even distribution of masses within the quiescent and star-forming groups, as well as overall. The potential satellite galaxies are also sorted into quiescent (3132) and star-forming (19030) groups. The overwhelming majority of star-forming satellite galaxies can be partly explained by the high mass cut-off of the central galaxies compared to the lower one of the potential satellites, which leads to a statistical domination of the sample by natural galaxy trends. 
+We also look at the star-formation rates of both the cenrtal and satellite galaxies. Using a rest frame U-V versus V-J graph, we sort the galaxies, central and satellite, into quiescent and star-forming groups. The vast majority of central galaxies are star-forming as can be seen in figures ~\ref{fig:color_mass} and ~\ref{fig:color_z}. There is a fairly even distribution of masses within the quiescent and star-forming groups, as well as overall. Higher redshift galaxies, however, tend to be in the upper left of the plot, indicating that they are more dusty. The potential satellite galaxies are also sorted into quiescent (3132) and star-forming (19030) groups. The overwhelming majority of star-forming satellite galaxies can be partly explained by the high mass cut-off of the central galaxies compared to the lower one of the potential satellites, which leads to a statistical domination of the sample by natural galaxy trends. 
 
 \begin{figure}
 \figurenum{2}
@@ -83,7 +83,17 @@ We also look at the star-formation rates of both the cenrtal and satellite galax
 \includegraphics[width=\linewidth]{temp_color_final}
 \DeclareGraphicsExtensions{.png}
 \caption{\footnotesize All central galaxies on a rest frame U-V versus V-J plot. The galaxies are in four mass bins ranging from 10 \textsuperscript{11} to 10 \textsuperscript{11.8} solar masses. The vast majority of galaxies are still star-forming. There is an even distribution of masses in all areas of the plot.}
-\label{fig:color}
+\label{fig:color_mass}
+\end{figure}
+
+\begin{figure}
+\figurenum{3}
+\centering
+\graphicspath{{C:/3d_hst/2015_finals/Colors/}}
+\includegraphics[width=\linewidth]{color}
+\DeclareGraphicsExtensions{.png}
+\caption{\footnotesize All central galaxies on a rest frame U-V versus V-J plot. The galaxies are in four redshift bins ranging from 0.5 to 2.5. The vast majority of galaxies are still star-forming. There generally higher redhsift galaxies in the upper left of the plot, indicating more dusty galaxies.}
+\label{fig:color_z}
 \end{figure}
 
 \subsection{Error Estimates}
@@ -98,10 +108,10 @@ We primarily look at the evolution of local galaxy number density with respect t
 
 \subsection{Redshift Evolution}
 
-In studying the variation in galaxy number density with respect to redshift, we split the selected massive galaxies into four bins based on redshift: 0.5 \textless Z \textless 1.0, 1.0 \textless Z \textless 1.5, 1.5 \textless Z \textless 2.0, and 2.0 \textless Z \textless 2.5. We plot these four bins on a counts in aperture radius graph to show the variation in galaxy number density over different sized environments. The smaller aperture radii are less accurate due to a lack of statistical completeness. From the third aperture radius (about 40 kpc) on, one can assume sufficient statistical completeness due to most galaxies having at least a few others within that range. In a similar manner, the last two aperture radii (about 2.5 and 4 mpc) are slightly statistically incomplete due to many galaxies containing most of their entire field within that range. We see in figure~\ref{fig:z} that there is a clear trend for the majority of the plot. Lower redshifts correspond with higher galaxy number density, and high redshifts with low densities. 
+In studying the variation in galaxy number density with respect to redshift, we split the selected massive galaxies into four bins based on redshift: 0.5 \textless  $z$ \textless 1.0, 1.0 \textless  $z$ \textless 1.5, 1.5 \textless  $z$ \textless 2.0, and 2.0 \textless  $z$ \textless 2.5. We plot these four bins on a counts in aperture radius graph to show the variation in galaxy number density over different sized environments. The smaller aperture radii are less accurate due to a lack of statistical completeness. From the third aperture radius (about 40 kpc) on, one can assume sufficient statistical completeness due to most galaxies having at least a few others within that range. In a similar manner, the last two aperture radii (about 2.5 and 4 mpc) are slightly statistically incomplete due to many galaxies containing most of their entire field within that range. We see in figure~\ref{fig:z} that there is a clear trend for the majority of the plot. Lower redshifts correspond with higher galaxy number density, and high redshifts with low densities. 
 
 \begin{figure}
-\figurenum{3}
+\figurenum{4}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
 \includegraphics[width=\linewidth]{temp_z_final}
@@ -110,15 +120,15 @@ In studying the variation in galaxy number density with respect to redshift, we 
 \label{fig:z}
 \end{figure}
 
-We also compare this data with lower redshifts of the same plot from Tal (2013)~\cite{2013ApJ...769...31T} in figure~\ref{fig:zpanel}. Here we can see that his data shows a lower galaxy number density throughou, which can be attributed to the fact that he is using a different survey. Although the data seems very similar, Tal finds no evolution in galaxy number density with change in redshift, an interesting contrast with our data. 
+We also compare this data with lower redshifts of the same plot from Tal (2013)~\cite{2013ApJ...769...31T} in figure~\ref{fig:zpanel}. Here we can see that his data shows a lower galaxy number density throughout, which can be attributed to the fact that he is using a different survey. Although the data seems very similar, Tal finds no evolution in galaxy number density with change in redshift, an interesting contrast with our data. 
 
 \begin{figure}
-\figurenum{4}
+\figurenum{5}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
 \includegraphics[width=\linewidth]{temp_zpanel_final}
 \DeclareGraphicsExtensions{.png}
-\caption{\footnotesize ZPANEL TEXT}
+\caption{\footnotesize All galaxies in four mass bins plotted in a counts in aperture radius graph. Data from Tal (2013)~\cite{2013ApJ...769...31T} is also shown. Although the data is similar, Tal finds no correlation between galaxy number density and central galaxy redshift.}
 \label{fig:zpanel}
 \end{figure}
 
@@ -127,7 +137,7 @@ We also compare this data with lower redshifts of the same plot from Tal (2013)~
 In studying variation over mass, we once again split the selected massive galaxies into four mass bins: 10 \textsuperscript{11.0}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{11.15}$M_{\odot}$, 10 \textsuperscript{11.15}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{11.3}$M_{\odot}$, 10 \textsuperscript{11.3}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{11.45}$M_{\odot}$, and mass \textgreater 10 \textsuperscript{11.45}$M_{\odot}$. The vast majority of the galaxies in the most massive bins lie between 10 \textsuperscript{11.45}$M_{\odot}$ and 10 \textsuperscript{11.6}$M_{\odot}$, but it should be mentioned that some are more massive up to a maximum of about 10 \textsuperscript{11.8}$M_{\odot}$. Just as with redshift, we plot the data on a counts in aperture radius graph in figure~\ref{fig:mass}. The only real takeaway from this plot is that there is a significant increase in galaxy number density for the most massive galaxies in the low and medium aperture radii.
 
 \begin{figure}
-\figurenum{5}
+\figurenum{6}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/nth_nearest/}}
 \includegraphics[width=\linewidth]{Mass_Density_Z}
@@ -139,7 +149,7 @@ In studying variation over mass, we once again split the selected massive galaxi
 We also plot the data using the nth nearest method in figure~\ref{fig:nth}. In this plot we can analyze change in number density over both redshift and mass. The black line represents the median point for the galaxies, with error bars for the median absolute deviation. The trend of increased galaxy number density with lower redshifts is hard to see, but definively present. One can also notice a general upward trend of galaxy number density with increased mass, as seen in figure~\ref{fig:mass}. Beyond that, one can also see that there is less variation in galaxy number densities for all masses for higher redshifts (smaller error bars).
 
 \begin{figure}
-\figurenum{6}
+\figurenum{7}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
 \includegraphics[width=\linewidth]{temp_lmass_final}
@@ -153,7 +163,7 @@ We also plot the data using the nth nearest method in figure~\ref{fig:nth}. In t
 We also look at the variation in galaxy number density in local and general environments based on the mass of the satellite galaxies. We do this by splitting up all the satellite galaxies into four mass bins: 10 \textsuperscript{9.415}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{9.8}$M_{\odot}$, 10 \textsuperscript{9.8}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{10.3}$M_{\odot}$, 10 \textsuperscript{10.3}$M_{\odot}$ \textless mass \textless 10 \textsuperscript{10.8}$M_{\odot}$, and mass \textgreater 10 \textsuperscript{10.8}$M_{\odot}$. In figure ~\ref{fig:mass_sat} we can see these four bins plotted on an aperture radius graph. The plot shows that in the local environment, there is a greater number density of more massive satellites and a lower number density of less massive satellites. This trend, however, flips in the more general environment (~100kpc and above).
 
 \begin{figure}
-\figurenum{7}
+\figurenum{8}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/aperture_distance/}}
 \includegraphics[width=\linewidth]{temp_lmasspanel_final}
@@ -168,14 +178,44 @@ Using the star-formation data, we look at galaxy conformity. In figure ~\ref{fig
 
 It should be noted that the extreme error bars for the quiescent satellites of the star-forming central galaxies is due to the points being an average of so few actual galaxies and creating an extremely large standard deviation. 
 
+In figure ~\ref{fig:conformity1} we calculate the quiescent satellite percentage (F$_{q}$) for all of the central galaxies binned by redshift and star formation color. F$_{q}$ is simply the number of quiescent satellites divided by the total number of satellites within the specified aperture radius. The Quiescent centrals clearly have greater F$_{q}$s for all redshifts, with an increased difference for lower redshifts.
+
+In figure ~\ref{fig:conformity2} we calculate Conformity of each central galaxy bin per aperture radius. The Conformity calculation is simply
+
+$$Conformity = \frac{F_{q} of quiescent centrals - F_{q} of star forming centrals}{F_{q} of all centrals}$$.
+
+There is increased conformity for lower redshifts, with conformity in general going to 0 at high aperture radii.
+
+
+
 \begin{figure}
-\figurenum{8}
+\figurenum{9}
 \centering
 \graphicspath{{C:/3d_hst/2015_finals/Colors/}}
-\includegraphics[width=\linewidth]{temp_color_panel}
+\includegraphics[width=\linewidth]{colorpanel}
 \DeclareGraphicsExtensions{.png}
 \caption{\footnotesize All of the galaxies sorted into quiescent and star-forming groups plotted separately on an aperture radius versus galaxy number density graph. The satellites of each central galaxy are also sorted in quiescent and star-forming groups, and put on the same sub-plot. There is a correlation between central galaxy type and number density of satellite type at the local environment (small aperture radii). The trned of greater number density of star-formign satellites in the general environment (high aperture radii) can be largely explained through the satellite sample selection.}
 \label{fig:color_panel}
+\end{figure}
+
+\begin{figure}
+\figurenum{10}
+\centering
+\graphicspath{{C:/3d_hst/2015_finals/Colors/}}
+\includegraphics[width=\linewidth]{temp_color_conformity}
+\DeclareGraphicsExtensions{.png}
+\caption{\footnotesize All central galaxies binned by redshift and star formation color plotted with Quiescent satellite percentage per aperture radius. There is a much greater quiescent satellite percentage for quiescent centrals at all redshifts. However, this difference is smaller for higher redshifts.}
+\label{fig:conformity1}
+\end{figure}
+
+\begin{figure}
+\figurenum{11}
+\centering
+\graphicspath{{C:/3d_hst/2015_finals/Colors/}}
+\includegraphics[width=\linewidth]{conformity}
+\DeclareGraphicsExtensions{.png}
+\caption{\footnotesize All central galaxies binned by redshift plotted with Conformity per aperture radius. Lower redshifts generally have greater conformity.}
+\label{fig:conformity2}
 \end{figure}
 
 \section{Discussion}
